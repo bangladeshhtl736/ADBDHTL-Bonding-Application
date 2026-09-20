@@ -3,7 +3,7 @@
         <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-headset text-2xl"></i></div>
         <div>
             <h2 class="text-xl font-bold text-slate-900">Online Support & Ticket Desk</h2>
-            <p class="text-xs text-slate-500">কাস্টমারদের সাপোর্ট আবেদন এবং তার উত্তর প্রদান করার সিস্টেম</p>
+            <p class="text-xs text-slate-500">কাস্টমারদের সাপোর্ট আবেদন, হোয়াটসঅ্যাপ নম্বর এবং অটো ফিল্টার সিস্টেম</p>
         </div>
     </div>
 
@@ -13,15 +13,26 @@
             <h3 class="font-bold text-sm text-slate-900 mb-3 uppercase tracking-wider"><i class="fa-solid fa-ticket mr-1 text-brand-red"></i> নতুন সাপোর্ট আবেদন ফর্ম (Customer Ticket Form)</h3>
             <form onsubmit="submitSupportTicket(event)" class="space-y-3">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">কাস্টমার বা আবেদনকারীর নাম</label>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">কাস্টমার নাম (অটো ডাটা ফিল্টার)</label>
+                    <!-- কাস্টমার লিস্ট থেকে সিলেক্ট করার ড্রপডাউন (অটো ফিল্টার) -->
+                    <select id="suppCustomerSelect" required onchange="onCustomerSelectChange()" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white">
+                        <!-- এডমিন প্যানেলের ডাটাবেজ থেকে এখানে নামগুলো অটো আসবে -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">যোগাযোগকারীর নাম (Contact Person)</label>
                     <input type="text" required id="suppName" placeholder="আপনার নাম লিখুন..." class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">হোয়াটসঅ্যাপ নম্বর (WhatsApp Number)</label>
+                    <input type="text" required id="suppWhatsapp" placeholder="যেমন: +8801711000000" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase mb-1">ফ্যাক্টরি / Vendor Name</label>
                     <input type="text" required id="suppFactory" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিষয়</label>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিষয়</label>
                     <select id="suppSubject" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white">
                         <option>Bonding Machine Temperature Mismatch</option>
                         <option>Applied Pressure Calculation Help</option>
@@ -39,23 +50,23 @@
             </form>
         </div>
 
-        <!-- ডান পাশ: জমা হওয়া টিকিটের তালিকা এবং উত্তর দেওয়ার অপশন -->
-        <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col justify-between h-[460px]">
+        <!-- ডান পাশ: জমা হওয়া টিকিটের তালিকা এবং উত্তর দেওয়ার অপশন -->
+        <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col justify-between h-[520px]">
             <div class="font-bold text-xs text-slate-700 pb-2 border-b border-slate-200 flex justify-between items-center">
-                <span><i class="fa-solid fa-list-ul text-brand-red mr-1"></i> কাস্টমার টিকিট ও উত্তরের ডেক্স</span>
+                <span><i class="fa-solid fa-list-ul text-brand-red mr-1"></i> কাস্টমার টিকিট ও হোয়াটসঅ্যাপ ডেক্স</span>
                 <span id="ticketCountBadge" class="bg-brand-red text-white px-2 py-0.5 rounded text-[10px]">0 Tickets</span>
             </div>
 
             <!-- টিকিট লিস্ট কন্টেইনার -->
             <div id="ticketListBox" class="flex-grow my-2 space-y-2 overflow-y-auto custom-scrollbar text-xs">
-                <!-- ডায়নামিক টিকিট এখানে দেখাবে -->
-                <div class="text-slate-400 text-center py-10">কোনো নতুন টিকিট জমা হয়নি।</div>
+                <!-- ডায়নামিক টিকিট এখানে দেখাবে -->
+                <div class="text-slate-400 text-center py-10">কোনো নতুন টিকিট জমা হয়নি।</div>
             </div>
 
             <!-- উত্তর লেখার বক্স -->
             <div id="replySection" class="hidden border-t border-slate-200 pt-2 space-y-2">
                 <div class="text-[11px] font-bold text-slate-700 flex justify-between">
-                    <span>রিপ্লাই দেওয়া হচ্ছে: <span id="activeTicketTitle" class="text-brand-red"></span></span>
+                    <span>রিপ্লাই দেওয়া হচ্ছে: <span id="activeTicketTitle" class="text-brand-red"></span></span>
                     <button onclick="closeReplyBox()" class="text-red-600 hover:underline">বন্ধ করুন</button>
                 </div>
                 <div class="flex gap-2">
