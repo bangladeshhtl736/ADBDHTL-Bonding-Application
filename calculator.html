@@ -1,1 +1,35 @@
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+    <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+        <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-calculator text-2xl"></i></div>
+        <div>
+            <h2 class="text-xl font-bold text-slate-900">Applied Pressure Calculator</h2>
+            <p class="text-xs text-slate-500">Calculate exact force per unit area on Heat Transfer Labels</p>
+        </div>
+    </div>
 
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="space-y-4">
+            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Line Pressure (Kg)</label><input type="number" step="0.1" id="calcLinePress" value="3.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
+            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Piston Diameter (CM)</label><input type="number" step="0.1" id="calcPistonDia" value="10" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
+            <div class="grid grid-cols-2 gap-4">
+                <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Length (CM)</label><input type="number" step="0.1" id="calcRubberL" value="18" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
+                <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Width (CM)</label><input type="number" step="0.1" id="calcRubberW" value="7.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
+            </div>
+            <button onclick="syncToReport()" class="w-full py-3 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> এই রিডিং রিপোর্ট পেজে নিয়ে যান
+            </button>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 rounded-xl space-y-4 flex flex-col justify-between">
+            <div>
+                <span class="text-xs uppercase font-bold text-slate-400">Calculated Applied Pressure Result</span>
+                <div class="text-4xl sm:text-5xl font-extrabold text-emerald-400 my-2"><span id="calcAppliedResult">2.04</span> <span class="text-lg text-white font-normal">Kg/cm²</span></div>
+                <p class="text-xs text-slate-300 leading-relaxed border-t border-slate-800 pt-3 mt-3"><strong class="text-amber-400">নোট:</strong> লাইন প্রেসার এবং এপ্লাইড প্রেসার একই নয়।</p>
+            </div>
+            <div class="bg-slate-800/80 p-4 rounded-lg font-mono text-xs space-y-2 border border-slate-700">
+                <div class="flex justify-between"><span class="text-slate-400">Piston Area (A₁):</span><span id="calcPistonAreaText" class="text-slate-200">78.54 cm²</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Rubber Area (A₂):</span><span id="calcRubberAreaText" class="text-slate-200">135.00 cm²</span></div>
+            </div>
+        </div>
+    </div>
+</div>
