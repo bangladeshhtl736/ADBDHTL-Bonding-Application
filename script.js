@@ -1,5 +1,6 @@
 let adminItems = ["ON-291351-HTL-HALO-GLB", "GAP-88219-HTL-CORE", "TG-77312-HTL-LABEL"];
 let adminRBOs = ["OLD NAVY", "GAP", "TARGET", "WALMART"];
+let adminCustomers = ["MD LUTFOR RAHMAN", "JAY MILLS FACTORY", "AHMED FASHION"]; // নতুন কাস্টমার ডাটাবেজ
 
 window.addEventListener('DOMContentLoaded', async () => {
     await loadComponent('page-dashboard', 'report-gen.html');
@@ -117,9 +118,11 @@ function previewImage(input, imgId, txtId) {
     }
 }
 
+// Admin Management Logic (Updated with Customer Support)
 function renderAdminLists() {
     const itemList = document.getElementById('adminItemList');
     const rboList = document.getElementById('adminRBOList');
+    const customerList = document.getElementById('adminCustomerList');
 
     if(itemList) {
         itemList.innerHTML = adminItems.map((item, idx) => `
@@ -139,8 +142,18 @@ function renderAdminLists() {
         `).join('');
     }
 
+    if(customerList) {
+        customerList.innerHTML = adminCustomers.map((cust, idx) => `
+            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
+                <span>${cust}</span>
+                <button onclick="removeAdminCustomer(${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+            </li>
+        `).join('');
+    }
+
     if(document.getElementById('itemCountTag')) document.getElementById('itemCountTag').innerText = `${adminItems.length} Items`;
     if(document.getElementById('rboCountTag')) document.getElementById('rboCountTag').innerText = `${adminRBOs.length} RBOs`;
+    if(document.getElementById('customerCountTag')) document.getElementById('customerCountTag').innerText = `${adminCustomers.length} Customers`;
     
     populateFilters();
 }
@@ -170,6 +183,20 @@ function addAdminRBO() {
 
 function removeAdminRBO(idx) {
     adminRBOs.splice(idx, 1);
+    renderAdminLists();
+}
+
+function addAdminCustomer() {
+    const val = document.getElementById('newCustomerInput')?.value.trim().toUpperCase();
+    if (val && !adminCustomers.includes(val)) {
+        adminCustomers.push(val);
+        document.getElementById('newCustomerInput').value = '';
+        renderAdminLists();
+    }
+}
+
+function removeAdminCustomer(idx) {
+    adminCustomers.splice(idx, 1);
     renderAdminLists();
 }
 
