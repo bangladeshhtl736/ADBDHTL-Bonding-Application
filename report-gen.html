@@ -34,7 +34,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div class="flex items-center gap-3">
                     <div class="bg-brand-red text-white p-2.5 rounded font-black tracking-widest text-2xl uppercase">
-                        AVERY DENNISON
+                        AVERY
                     </div>
                     <div>
                         <span class="text-xs font-bold tracking-widest uppercase text-slate-500 block">Quality Assurance Service Report</span>
@@ -47,13 +47,14 @@
                 </div>
             </div>
 
-            <!-- SECTION 1: Customer Information (প্রথম সারিতে ৫ কলাম, পরবর্তী সারিতে ৪ কলাম) -->
+            <!-- SECTION 1: Customer Information -->
             <div class="mt-6 border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
                 <div class="bg-slate-900 text-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider">
                     <i class="fa-solid fa-building mr-1"></i> Customer Information
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 p-3 text-xs">
-                    <!-- Row 1: ৫টি ফিল্ড (Date, Sales Order, HTL Item Ref, RBO, Vendor/Customer) -->
+                    
+                    <!-- Row 1: ৫টি কলাম -->
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Date (DD/MMM/YY)</label>
                         <input type="text" id="reportDate" value="21-Sep-2026" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
@@ -71,11 +72,15 @@
                         <input type="text" id="reportMasterCustomer" value="OLD NAVY" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
                     <div class="col-span-2 sm:col-span-2 lg:col-span-1">
+                        <label class="block font-bold text-slate-600 mb-0.5">Quality Tag</label>
+                        <input type="text" id="reportQuality" value="AG PASS" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                    </div>
+
+                    <!-- Row 2: ৪টি কলাম (বাকি ঘরগুলো lg:col-span-1 বা lg:col-span-2 দিয়ে সুন্দরভাবে বিন্যস্ত) -->
+                    <div class="col-span-2 sm:col-span-2 lg:col-span-2">
                         <label class="block font-bold text-slate-600 mb-0.5">Vendor Name / Customer</label>
                         <input type="text" id="reportVendor" value="JAY MILLS PRIVATE LIMITED" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
-
-                    <!-- Row 2: ৪টি ফিল্ড (PO/Style, Fabric Color, Quality Tag, Contact Person Name) -->
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Customer PO/Style</label>
                         <input type="text" id="reportPO" value="All Styles" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
@@ -85,21 +90,16 @@
                         <input type="text" id="reportFabricColor" value="ALL" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
                     <div>
-                        <label class="block font-bold text-slate-600 mb-0.5">Quality Tag</label>
-                        <input type="text" id="reportQuality" value="AG PASS" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
-                    </div>
-                    <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Contact Person Name</label>
                         <input type="text" id="reportContactName" value="Md. Rahim Uddin" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
-                    </div>
-                         <label class="block font-bold text-slate-600 mb-0.5">Contact Person Number</label>
+
+                    <!-- Row 3: বাকি ফিল্ডগুলো -->
+                    <div>
+                        <label class="block font-bold text-slate-600 mb-0.5">Contact Person Number</label>
                         <input type="text" id="reportContactNo" value="+8801711000000" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
-                    <div class="col-span-2 sm:col-span-2 lg:col-span-1 hidden lg:block"></div><!-- ফাঁকা স্পেস ব্যালেন্স করার জন্য -->
-
-                    <!-- Row 3: বাকি ফিল্ডগুলো (Contact Number, Representative Name, Rep Number, Address) -->
-                        <div>
+                    <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Customer Representative</label>
                         <input type="text" id="reportRepName" value="Tanvir Ahmed" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
@@ -111,6 +111,7 @@
                         <label class="block font-bold text-slate-600 mb-0.5">Customer Address</label>
                         <input type="text" id="reportAddress" value="Plot # 12, Export Processing Zone, Savar, Dhaka" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
+
                 </div>
             </div>
 
@@ -119,7 +120,7 @@
                 <div class="bg-slate-800 text-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider">
                     <i class="fa-solid fa-user-gear mr-1"></i> Application Engineer Information
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 p-4 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 text-xs">
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Engineer Name</label>
                         <input type="text" id="reportEngName" value="Md. Service Engineer" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
@@ -131,10 +132,6 @@
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Email ID</label>
                         <input type="text" id="reportEngEmail" value="engineer@averydennison.com" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-slate-600 mb-0.5">Auto Tracking No</label>
-                        <input type="text" id="reportEngPhone" value="2609001" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
                 </div>
             </div>
