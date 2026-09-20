@@ -11,6 +11,12 @@
                 <select id="filterRBO" onchange="applyAdminFilter()" class="bg-slate-50 border border-slate-300 text-xs rounded-lg p-2 font-semibold text-slate-800 focus:ring-brand-red">
                 </select>
             </div>
+            <!-- নতুন কাস্টমার ফিল্টার ড্রপডাউন -->
+            <div>
+                <label class="block text-[11px] font-bold text-slate-500 uppercase">Filter Customer Name</label>
+                <select id="filterCustomer" onchange="applyAdminFilter()" class="bg-slate-50 border border-slate-300 text-xs rounded-lg p-2 font-semibold text-slate-800 focus:ring-brand-red">
+                </select>
+            </div>
         </div>
 
         <div class="flex items-center gap-2">
@@ -48,7 +54,7 @@
                     <input type="date" id="reportDate" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                 </div>
                 <div class="col-span-2 sm:col-span-1 md:col-span-2">
-                    <label class="block font-bold text-slate-600 mb-0.5">Vendor Name</label>
+                    <label class="block font-bold text-slate-600 mb-0.5">Vendor Name / Customer</label>
                     <input type="text" id="reportVendor" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                 </div>
                 <div>
