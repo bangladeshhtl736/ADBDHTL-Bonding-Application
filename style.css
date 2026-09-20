@@ -1,1 +1,44 @@
+body {
+    font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+    background-color: #f8fafc;
+}
 
+/* Printable Sheet Styling */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .print-container {
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+        padding: 15px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    input, select, textarea {
+        border: none !important;
+        background: transparent !important;
+        appearance: none;
+        -webkit-appearance: none;
+        font-weight: bold;
+        padding: 0 !important;
+    }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
