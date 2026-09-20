@@ -1,1 +1,700 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTL Bonding Parameter & Service Report System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#CC0000',
+                            darkred: '#990000',
+                            navy: '#0F172A',
+                            slate: '#1E293B',
+                            light: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Bengali', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
 
+    <!-- Navbar Header -->
+    <header class="no-print bg-slate-900 text-white shadow-md border-b border-slate-800 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+                    <div class="bg-brand-red text-white p-2 rounded-lg font-black text-xl tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-industry"></i>
+                        <span>HTL</span>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base sm:text-lg leading-tight">Bonding System Portal</h1>
+                        <p class="text-[11px] text-slate-400">Avery Dennison / HTL Service Manager</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs (Desktop) -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 rounded-md bg-brand-red text-white flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-file-contract"></i> Report Gen
+                    </button>
+                    <button onclick="switchTab('calculator')" id="nav-calculator" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-calculator"></i> Calculator
+                    </button>
+                    <button onclick="switchTab('handling')" id="nav-handling" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-list-check"></i> Instructions
+                    </button>
+                    <button onclick="switchTab('solution')" id="nav-solution" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-screwdriver-wrench"></i> Solution Hub
+                    </button>
+                    <button onclick="switchTab('support')" id="nav-support" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-headset"></i> Support
+                    </button>
+                    <button onclick="switchTab('admin')" id="nav-admin" class="nav-btn px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-user-gear"></i> Admin Panel
+                    </button>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openGithubModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 rounded-lg flex items-center gap-1.5 transition">
+                        <i class="fa-brands fa-github text-brand-red text-sm"></i>
+                        <span class="hidden sm:inline">GitHub Pages গাইড</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Sub-bar -->
+        <div class="md:hidden border-t border-slate-800 bg-slate-900/90 px-2 py-2 flex items-center justify-around text-xs overflow-x-auto custom-scrollbar">
+            <button onclick="switchTab('dashboard')" class="p-1.5 text-center text-slate-300">Report</button>
+            <button onclick="switchTab('calculator')" class="p-1.5 text-center text-slate-300">Calc</button>
+            <button onclick="switchTab('handling')" class="p-1.5 text-center text-slate-300">Rules</button>
+            <button onclick="switchTab('solution')" class="p-1.5 text-center text-slate-300">Solution</button>
+            <button onclick="switchTab('support')" class="p-1.5 text-center text-slate-300">Support</button>
+            <button onclick="switchTab('admin')" class="p-1.5 text-center text-slate-300">Admin</button>
+        </div>
+    </header>
+
+    <main class="flex-grow p-3 sm:p-6 md:p-8 max-w-7xl mx-auto w-full">
+
+        <!-- ================= PAGE 1: REPORT GENERATOR & DASHBOARD ================= -->
+        <div id="page-dashboard" class="page-content space-y-6">
+            
+            <!-- Quick Filter & Action Bar (No Print) -->
+            <div class="no-print bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap gap-4 items-center justify-between">
+                <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase">Filter Item Ref</label>
+                        <select id="filterItemRef" onchange="applyAdminFilter()" class="bg-slate-50 border border-slate-300 text-xs rounded-lg p-2 font-semibold text-slate-800 focus:ring-brand-red">
+                            <!-- Populated dynamically from Admin -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase">Filter RBO (Master Customer)</label>
+                        <select id="filterRBO" onchange="applyAdminFilter()" class="bg-slate-50 border border-slate-300 text-xs rounded-lg p-2 font-semibold text-slate-800 focus:ring-brand-red">
+                            <!-- Populated dynamically from Admin -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="window.print()" class="px-4 py-2 bg-brand-red hover:bg-brand-darkred text-white text-xs font-bold rounded-lg shadow flex items-center gap-2 transition">
+                        <i class="fa-solid fa-print"></i> Print / Download PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Printable Service Report Sheet -->
+            <div class="print-container bg-white shadow-lg rounded-xl border border-slate-300 p-4 sm:p-8 text-slate-900">
+                
+                <!-- Sheet Header -->
+                <div class="border-b-2 border-slate-900 pb-4 mb-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-brand-red text-white p-2.5 rounded font-black tracking-widest text-2xl uppercase">
+                                AVERY
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold tracking-widest uppercase text-slate-500 block">Quality Assurance Service Report</span>
+                                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Bonding Parameter for Heat Transfer Label</h2>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-bold text-slate-500 block">Status: <span class="text-emerald-600">RESOLVED</span></span>
+                            <span class="text-xs bg-slate-100 border border-slate-300 px-2 py-0.5 rounded font-mono font-medium text-slate-700 mt-1 inline-block">Doc ID: HTL-2026-SR</span>
+                        </div>
+                    </div>
+
+                    <!-- Customer & Product Metadata Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-6 bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs">
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-0.5">Master Customer (RBO)</label>
+                            <input type="text" id="reportMasterCustomer" value="OLD NAVY" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-0.5">Date (DD/MM/YY)</label>
+                            <input type="date" id="reportDate" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                        </div>
+                        <div class="col-span-2 sm:col-span-1 md:col-span-2">
+                            <label class="block font-bold text-slate-600 mb-0.5">Vendor Name</label>
+                            <input type="text" id="reportVendor" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-0.5">HTL Item Ref No</label>
+                            <input type="text" id="reportHtlRef" value="ON-291351-HTL-HALO-GLB" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-mono font-bold text-brand-darkred">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-0.5">Customer PO/Style</label>
+                            <input type="text" id="reportPO" value="All Styles" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-0.5">Fabric Color</label>
+                            <input type="text" id="reportFabricColor" value="ALL" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-600 mb-0.5">Quality Tag</label>
+                            <input type="text" id="reportQuality" value="AG PASS" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Handling Rules Section -->
+                <div class="mb-6">
+                    <div class="bg-slate-900 text-white py-1.5 px-3 rounded-t text-xs font-bold uppercase tracking-wider">
+                        Instructions for Label Handling
+                    </div>
+                    <div class="border border-slate-300 border-t-0 rounded-b p-3 text-xs space-y-1.5 bg-white">
+                        <p>* The silicone paper cannot be removed before bonding. (বন্ডিং করার আগে সিলিকন কাগজ সরানো যাবে না।)</p>
+                        <p>* Label storage condition will be below 30 degree celsius. (লেবেল স্টোরেজ অবস্থা ৩০ ডিগ্রি সেলসিয়াসের নিচে হবে।)</p>
+                        <p class="text-brand-red font-bold">* Check for correct temperature with thermo paper. What is the difference between setting and actual temperature?</p>
+                        <p class="text-brand-red font-bold">* Line pressure and applied pressure are not the same. Applied pressure calculation is to be done.</p>
+                        <p>* Bonding cannot be done on uneven surfaces or with pant loop. (অসম পৃষ্ঠের উপর বন্ডিং করা যাবে না।)</p>
+                    </div>
+                </div>
+
+                <!-- Machine Setup Table -->
+                <div class="mb-6">
+                    <div class="bg-slate-900 text-white py-1.5 px-3 rounded-t text-xs font-bold uppercase tracking-wider flex justify-between items-center">
+                        <span>As per Customer Bonding Machine Setup</span>
+                        <span class="text-[10px] font-normal">Auto-Calculated Applied Pressure</span>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-300 rounded-b">
+                        <table class="w-full text-center border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-100 font-bold border-b border-slate-300">
+                                    <th class="p-2 border-r">Setting Temp (°C)</th>
+                                    <th class="p-2 border-r text-amber-900 bg-amber-50">Actual Temp (°C)</th>
+                                    <th class="p-2 border-r">Dwell Time 1st (s)</th>
+                                    <th class="p-2 border-r">Line Press (Kg)</th>
+                                    <th class="p-2 border-r">Rubber L (cm)</th>
+                                    <th class="p-2 border-r">Rubber W (cm)</th>
+                                    <th class="p-2 border-r">Piston Dia (cm)</th>
+                                    <th class="p-2 border-r bg-emerald-100 text-emerald-900 font-extrabold">Applied Press (Kg/cm²)</th>
+                                    <th class="p-2">Dwell Time 2nd</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="font-bold border-b border-slate-300">
+                                    <td class="p-2 border-r">
+                                        <input type="number" id="rptSetTemp" value="230" oninput="syncCalculator()" class="w-full text-center font-bold">
+                                    </td>
+                                    <td class="p-2 border-r bg-amber-50">
+                                        <input type="number" id="rptActTemp" value="166" oninput="syncCalculator()" class="w-full text-center font-bold text-amber-900">
+                                    </td>
+                                    <td class="p-2 border-r">
+                                        <input type="number" id="rptDwell1" value="8" oninput="syncCalculator()" class="w-full text-center font-bold">
+                                    </td>
+                                    <td class="p-2 border-r">
+                                        <input type="number" step="0.1" id="rptLinePress" value="3.5" oninput="syncCalculator()" class="w-full text-center font-bold">
+                                    </td>
+                                    <td class="p-2 border-r">
+                                        <input type="number" step="0.1" id="rptRubberL" value="18" oninput="syncCalculator()" class="w-full text-center font-bold">
+                                    </td>
+                                    <td class="p-2 border-r">
+                                        <input type="number" step="0.1" id="rptRubberW" value="7.5" oninput="syncCalculator()" class="w-full text-center font-bold">
+                                    </td>
+                                    <td class="p-2 border-r">
+                                        <input type="number" step="0.1" id="rptPistonDia" value="10" oninput="syncCalculator()" class="w-full text-center font-bold">
+                                    </td>
+                                    <td class="p-2 border-r bg-emerald-100 text-emerald-900 font-black text-sm">
+                                        <span id="rptAppliedPressure">2.04</span>
+                                    </td>
+                                    <td class="p-2">
+                                        <input type="text" id="rptDwell2" value="N/A" class="w-full text-center font-bold">
+                                    </td>
+                                </tr>
+                                <tr class="bg-slate-50 text-[10px] text-slate-500">
+                                    <td class="p-1 border-r">Celsius</td>
+                                    <td class="p-1 border-r">Celsius</td>
+                                    <td class="p-1 border-r">Second</td>
+                                    <td class="p-1 border-r">Kg</td>
+                                    <td class="p-1 border-r">CM</td>
+                                    <td class="p-1 border-r">CM</td>
+                                    <td class="p-1 border-r">CM</td>
+                                    <td class="p-1 border-r bg-emerald-50 text-emerald-800">kg/cm²</td>
+                                    <td class="p-1">Second</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Photo Verification Attachments -->
+                <div class="mb-6">
+                    <div class="bg-slate-900 text-white py-1.5 px-3 rounded-t text-xs font-bold uppercase tracking-wider">
+                        Machine Parameter Evidence Images
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 p-2 border border-slate-300 rounded-b bg-slate-50">
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold mb-1">1. Temp Display</p>
+                            <div onclick="triggerImageUpload('img1')" class="h-20 border border-dashed border-slate-300 bg-white rounded flex items-center justify-center cursor-pointer overflow-hidden">
+                                <img id="pimg1" class="hidden w-full h-full object-cover">
+                                <span id="txt1" class="text-[10px] text-slate-400">Upload</span>
+                                <input type="file" id="img1" accept="image/*" class="hidden" onchange="previewImage(this, 'pimg1', 'txt1')">
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold mb-1">2. Timer Read</p>
+                            <div onclick="triggerImageUpload('img2')" class="h-20 border border-dashed border-slate-300 bg-white rounded flex items-center justify-center cursor-pointer overflow-hidden">
+                                <img id="pimg2" class="hidden w-full h-full object-cover">
+                                <span id="txt2" class="text-[10px] text-slate-400">Upload</span>
+                                <input type="file" id="img2" accept="image/*" class="hidden" onchange="previewImage(this, 'pimg2', 'txt2')">
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold mb-1">3. Line Gauge</p>
+                            <div onclick="triggerImageUpload('img3')" class="h-20 border border-dashed border-slate-300 bg-white rounded flex items-center justify-center cursor-pointer overflow-hidden">
+                                <img id="pimg3" class="hidden w-full h-full object-cover">
+                                <span id="txt3" class="text-[10px] text-slate-400">Upload</span>
+                                <input type="file" id="img3" accept="image/*" class="hidden" onchange="previewImage(this, 'pimg3', 'txt3')">
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold mb-1">4. Rubber Length</p>
+                            <div onclick="triggerImageUpload('img4')" class="h-20 border border-dashed border-slate-300 bg-white rounded flex items-center justify-center cursor-pointer overflow-hidden">
+                                <img id="pimg4" class="hidden w-full h-full object-cover">
+                                <span id="txt4" class="text-[10px] text-slate-400">Upload</span>
+                                <input type="file" id="img4" accept="image/*" class="hidden" onchange="previewImage(this, 'pimg4', 'txt4')">
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold mb-1">5. Rubber Width</p>
+                            <div onclick="triggerImageUpload('img5')" class="h-20 border border-dashed border-slate-300 bg-white rounded flex items-center justify-center cursor-pointer overflow-hidden">
+                                <img id="pimg5" class="hidden w-full h-full object-cover">
+                                <span id="txt5" class="text-[10px] text-slate-400">Upload</span>
+                                <input type="file" id="img5" accept="image/*" class="hidden" onchange="previewImage(this, 'pimg5', 'txt5')">
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold mb-1">6. Piston Dia</p>
+                            <div onclick="triggerImageUpload('img6')" class="h-20 border border-dashed border-slate-300 bg-white rounded flex items-center justify-center cursor-pointer overflow-hidden">
+                                <img id="pimg6" class="hidden w-full h-full object-cover">
+                                <span id="txt6" class="text-[10px] text-slate-400">Upload</span>
+                                <input type="file" id="img6" accept="image/*" class="hidden" onchange="previewImage(this, 'pimg6', 'txt6')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Remarks & Signatures -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-4 border-slate-300">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Technician Service Remarks (সার্ভিস মন্তব্য)</label>
+                        <textarea id="rptRemarks" rows="3" class="w-full p-2 border border-slate-300 rounded text-xs bg-slate-50">কাস্টমার ফ্যাক্টরিতে বন্ডিং অ্যাপ্লিকেশন সমস্যা ছিল। এখন মেশিনের বন্ডিং অ্যাপ্লিকেশন প্যারামিটার ঠিক করে দেওয়া হয়েছে। তাপমাত্রা সেটিং ২৩০°C হলেও একচুয়াল ১৬৬°C পাওয়া গেছে। এপ্লাইড প্রেসার ২.০৩ Kg/cm² সেটিং করার পর এখন আর কোনো সমস্যা নেই।</textarea>
+                    </div>
+
+                    <div class="flex items-end justify-between gap-4 pt-6 text-center text-xs">
+                        <div class="w-1/2 border-t border-slate-400 pt-1">
+                            <p class="font-bold">Technician Signature</p>
+                            <p class="text-[10px] text-slate-500">Service Engineer</p>
+                        </div>
+                        <div class="w-1/2 border-t border-slate-400 pt-1">
+                            <p class="font-bold">Customer Acceptance</p>
+                            <p class="text-[10px] text-slate-500">Factory Representative</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= PAGE 2: PRESSURE CALCULATOR ================= -->
+        <div id="page-calculator" class="page-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+                    <div class="p-3 bg-brand-red text-white rounded-lg">
+                        <i class="fa-solid fa-calculator text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Applied Pressure Calculator</h2>
+                        <p class="text-xs text-slate-500">Calculate exact force per unit area on Heat Transfer Labels</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Calculator Form Inputs -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Line Pressure (Kg)</label>
+                            <input type="number" step="0.1" id="calcLinePress" value="3.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Piston Diameter (CM)</label>
+                            <input type="number" step="0.1" id="calcPistonDia" value="10" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Length (CM)</label>
+                                <input type="number" step="0.1" id="calcRubberL" value="18" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Width (CM)</label>
+                                <input type="number" step="0.1" id="calcRubberW" value="7.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
+                            </div>
+                        </div>
+
+                        <button onclick="syncToReport()" class="w-full py-3 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i> এই রিডিং রিপোর্ট পেজে নিয়ে যান
+                        </button>
+                    </div>
+
+                    <!-- Formula Breakdown Card -->
+                    <div class="bg-slate-900 text-white p-6 rounded-xl space-y-4 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs uppercase font-bold text-slate-400">Calculated Applied Pressure Result</span>
+                            <div class="text-4xl sm:text-5xl font-extrabold text-emerald-400 my-2">
+                                <span id="calcAppliedResult">2.04</span> <span class="text-lg text-white font-normal">Kg/cm²</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed border-t border-slate-800 pt-3 mt-3">
+                                <strong class="text-amber-400">নোট:</strong> লাইন প্রেসার এবং এপ্লাইড প্রেসার একই নয়। লাইন প্রেসার মেশিনে ইনপুট হিসেবে থাকে, আর এপ্লাইড প্রেসার সিলিকন রাবারের ক্ষেত্রফলের ওপর নির্ভর করে।
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-800/80 p-4 rounded-lg font-mono text-xs space-y-2 border border-slate-700">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Piston Area (A₁):</span>
+                                <span id="calcPistonAreaText" class="text-slate-200">78.54 cm²</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Rubber Area (A₂):</span>
+                                <span id="calcRubberAreaText" class="text-slate-200">135.00 cm²</span>
+                            </div>
+                            <div class="border-t border-slate-700 pt-2 flex justify-between font-bold">
+                                <span class="text-slate-400">Formula:</span>
+                                <span class="text-emerald-400">(Line Press × A₁) / A₂</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 3: LABEL HANDLING INSTRUCTIONS ================= -->
+        <div id="page-handling" class="page-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+                    <div class="p-3 bg-brand-red text-white rounded-lg">
+                        <i class="fa-solid fa-list-check text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Instructions for Label Handling</h2>
+                        <p class="text-xs text-slate-500">লেবেল হ্যান্ডলিং এবং সঠিক ব্যবহারের জন্য স্ট্যান্ডার্ড দিকনির্দেশনা</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-1">
+                        <span class="text-xs font-extrabold text-brand-red">RULE 01</span>
+                        <h3 class="font-bold text-sm text-slate-900">Silicone Paper Removal</h3>
+                        <p class="text-xs text-slate-600">The silicone paper cannot be removed before bonding.</p>
+                        <p class="text-xs text-slate-800 font-semibold">বন্ডিং করার আগে সিলিকন কাগজ সরানো যাবে না।</p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-1">
+                        <span class="text-xs font-extrabold text-brand-red">RULE 02</span>
+                        <h3 class="font-bold text-sm text-slate-900">Protection Against Blows</h3>
+                        <p class="text-xs text-slate-600">The label should refrain from extra blows.</p>
+                        <p class="text-xs text-slate-800 font-semibold">লেবেলকে অতিরিক্ত আঘাত থেকে বিরত রাখতে হবে।</p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-1">
+                        <span class="text-xs font-extrabold text-brand-red">RULE 03</span>
+                        <h3 class="font-bold text-sm text-slate-900">Storage Condition</h3>
+                        <p class="text-xs text-slate-600">Label storage condition will be below 30 degree celsius.</p>
+                        <p class="text-xs text-slate-800 font-semibold">লেবেল স্টোরেজ অবস্থা ৩০ ডিগ্রি সেলসিয়াসের নিচে হবে।</p>
+                    </div>
+
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg space-y-1">
+                        <span class="text-xs font-extrabold text-amber-700">RULE 04 (CRITICAL)</span>
+                        <h3 class="font-bold text-sm text-slate-900">Temperature Offset Check</h3>
+                        <p class="text-xs text-slate-600">Check for correct temperature with thermo paper. Check difference between setting and actual temperature.</p>
+                        <p class="text-xs text-amber-900 font-semibold">সঠিক তাপমাত্রা আছে কিনা থার্মো পেপার দিয়ে চেক করুন। সেটিং এবং একচুয়াল তাপমাত্রা পার্থক্য বের করুন।</p>
+                    </div>
+
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg space-y-1">
+                        <span class="text-xs font-extrabold text-amber-700">RULE 05 (CRITICAL)</span>
+                        <h3 class="font-bold text-sm text-slate-900">Pressure Difference</h3>
+                        <p class="text-xs text-slate-600">Line pressure and applied pressure are not the same. Applied pressure calculation is to be done.</p>
+                        <p class="text-xs text-amber-900 font-semibold">লাইন প্রেসার এবং এপ্লাইড প্রেসার একই না। এপ্লাইড প্রেসার ক্যালকুলেশন করতে হবে।</p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-1">
+                        <span class="text-xs font-extrabold text-brand-red">RULE 06</span>
+                        <h3 class="font-bold text-sm text-slate-900">Surface Requirements</h3>
+                        <p class="text-xs text-slate-600">Bonding cannot be done on uneven surfaces or with pant loop.</p>
+                        <p class="text-xs text-slate-800 font-semibold">অসম পৃষ্ঠের (উঁচু নিচু) উপর বা প্যান্টের লুপ সহ বন্ডিং করা যাবে না।</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 4: SOLUTION HUB ================= -->
+        <div id="page-solution" class="page-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+                    <div class="p-3 bg-brand-red text-white rounded-lg">
+                        <i class="fa-solid fa-screwdriver-wrench text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Bonding Troubleshooting & Solution Hub</h2>
+                        <p class="text-xs text-slate-500">মেশিন ও বন্ডিং জনিত সমস্যার দ্রুত টেকনিক্যাল সমাধান</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Solution Item 1 -->
+                    <div class="border border-slate-200 rounded-lg p-4 hover:border-brand-red transition">
+                        <div class="flex items-start gap-3">
+                            <span class="p-2 bg-red-100 text-brand-red rounded font-bold text-sm"><i class="fa-solid fa-temperature-arrow-down"></i></span>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-900">১. তাপমাত্রা সেটিং অনুযায়ী একচুয়াল রিডিং পাওয়া যাচ্ছে না (Temp Drop)</h3>
+                                <p class="text-xs text-slate-600 mt-1">
+                                    <strong>সমস্যা:</strong> যেমন সেটিং ২৩০°C দেওয়া থাকলেও একচুয়াল পাওয়া যাচ্ছে ১৬৬°C。<br>
+                                    <strong>সমাধান:</strong> মেশিনের থার্মোকাপল (Thermocouple) সেন্সর বা হিটিং এলিমেন্ট চেক করুন। থার্মো পেপার দিয়ে আসল তাপমাত্রা মেপে প্রেসার প্লেট পরিষ্কার করুন।
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solution Item 2 -->
+                    <div class="border border-slate-200 rounded-lg p-4 hover:border-brand-red transition">
+                        <div class="flex items-start gap-3">
+                            <span class="p-2 bg-amber-100 text-amber-800 rounded font-bold text-sm"><i class="fa-solid fa-box-archive"></i></span>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-900">২. বন্ডিং উঠে যাওয়া বা পিলিং ফেইল হওয়া (Peeling Failure)</h3>
+                                <p class="text-xs text-slate-600 mt-1">
+                                    <strong>সমস্যা:</strong> হিট সিল করার পরও লেবেল কাপড় থেকে সহজে উঠে যাচ্ছে。<br>
+                                    <strong>সমাধান:</strong> Dwell Time (টাইমিং) বৃদ্ধি করুন অথবা Applied Pressure ক্যালকুলেশন করে সিলিকন রাবারের সাইজ অনুযায়ী সঠিক প্রেশার নিশ্চিত করুন।
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solution Item 3 -->
+                    <div class="border border-slate-200 rounded-lg p-4 hover:border-brand-red transition">
+                        <div class="flex items-start gap-3">
+                            <span class="p-2 bg-blue-100 text-blue-800 rounded font-bold text-sm"><i class="fa-solid fa-rug"></i></span>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-900">৩. অসম পৃষ্ঠে বা লুপের কাছে বন্ডিং নষ্ট হওয়া</h3>
+                                <p class="text-xs text-slate-600 mt-1">
+                                    <strong>সমস্যা:</strong> ফ্যাব্রিকের উচুঁ-নিচু জায়গায় প্রেশার সমান পড়ে না。<br>
+                                    <strong>সমাধান:</strong> স্পেশাল সিলিকন প্যাড বা জেনুইন নরম সিলিকন রাবার (যেমন: 18x7.5 cm) ব্যবহার করুন যেন প্রেসার সমানভাবে ছড়ায়।
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 5: ONLINE SUPPORT ================= -->
+        <div id="page-support" class="page-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+                    <div class="p-3 bg-brand-red text-white rounded-lg">
+                        <i class="fa-solid fa-headset text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Online Support & Ticket Desk</h2>
+                        <p class="text-xs text-slate-500">অনলাইন সাপোর্ট টিমকে বার্তা পাঠান বা দ্রুত সার্ভিস টিকিট বুক করুন</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Ticket Form -->
+                    <form onsubmit="submitSupportTicket(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">আপনার নাম / ইঞ্জিনিয়ারের নাম</label>
+                            <input type="text" required id="suppName" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">কাস্টমার ফ্যাক্টরি / Vendor Name</label>
+                            <input type="text" required id="suppFactory" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিষয়</label>
+                            <select id="suppSubject" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold">
+                                <option>Bonding Machine Temperature Mismatch</option>
+                                <option>Applied Pressure Calculation Help</option>
+                                <option>Heat Seal Label Quality Issue</option>
+                                <option>Other Machine Breakdown</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">বিস্তারিত বিবরণ</label>
+                            <textarea rows="3" required id="suppDetails" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs" placeholder="আপনার সমস্যাটি বিস্তারিত লিখুন..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs transition">
+                            <i class="fa-solid fa-paper-plane mr-1"></i> টিকিট জমা দিন
+                        </button>
+                    </form>
+
+                    <!-- Support Chat Simulation -->
+                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col justify-between h-[380px]">
+                        <div class="font-bold text-xs text-slate-700 pb-2 border-b border-slate-200 flex justify-between items-center">
+                            <span><i class="fa-solid fa-circle text-emerald-500 text-[8px] mr-1"></i> Live Support Chat</span>
+                            <span class="text-[10px] text-slate-400">Response time: ~5 mins</span>
+                        </div>
+                        <div id="chatBox" class="flex-grow my-3 space-y-3 overflow-y-auto custom-scrollbar text-xs">
+                            <div class="bg-white p-2.5 rounded-lg border border-slate-200 max-w-[85%] text-slate-700">
+                                <strong>Support Agent:</strong> হ্যালো! Avery Dennison HTL টেকনিক্যাল টিমে স্বাগতম। আমরা আপনাকে কিভাবে সাহায্য করতে পারি?
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="chatInput" placeholder="এখানে মেসেজ লিখুন..." class="flex-grow p-2 border border-slate-300 rounded text-xs">
+                            <button onclick="sendChatMessage()" class="px-4 bg-brand-red text-white text-xs font-bold rounded hover:bg-brand-darkred">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 6: ADMIN PANEL ================= -->
+        <div id="page-admin" class="page-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+                    <div class="p-3 bg-brand-red text-white rounded-lg">
+                        <i class="fa-solid fa-user-gear text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Admin Panel & Master Database</h2>
+                        <p class="text-xs text-slate-500">Item References এবং RBOs (Master Customers) ডাটাবেজ ইনপুট ও ফিল্টার ম্যানেজমেন্ট</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Manage Item Reference Database -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
+                            <span>Item Reference Management</span>
+                            <span id="itemCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 Items</span>
+                        </h3>
+                        
+                        <div class="flex gap-2">
+                            <input type="text" id="newItemInput" placeholder="যেমন: ON-291351-HTL-HALO-GLB" class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-mono font-semibold">
+                            <button onclick="addAdminItem()" class="px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+                        </div>
+
+                        <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
+                            <ul id="adminItemList" class="divide-y divide-slate-200 text-xs font-mono">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Manage RBO Master Customers -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
+                            <span>RBO (Master Customer) Management</span>
+                            <span id="rboCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 RBOs</span>
+                        </h3>
+
+                        <div class="flex gap-2">
+                            <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY / GAP / TARGET" class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold">
+                            <button onclick="addAdminRBO()" class="px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+                        </div>
+
+                        <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
+                            <ul id="adminRBOList" class="divide-y divide-slate-200 text-xs font-semibold">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- GitHub Hosting Guide Modal -->
+    <div id="githubModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-brands fa-github text-2xl text-brand-red"></i>
+                    <h3 class="font-bold text-base sm:text-lg">গিটহাব পেজেসে (GitHub Pages) অনলাইন সাইট তৈরি করার সহজ উপায়</h3>
+                </div>
+                <button onclick="closeGithubModal()" class="text-slate-400 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto custom-scrollbar space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                <p class="bg-emerald-50 text-emerald-800 p-3 rounded-lg border border-emerald-200 font-medium">
+                    <i class="fa-solid fa-circle-check mr-1"></i> এই ওয়েবসাইটটির সম্পূর্ণ সিস্টেম একটি ফাইল **index.html** এর মধ্যে রয়েছে। বিনামূল্যে এটি অনলাইনে চালানোর ধাপগুলো নিচে দেওয়া হলো:
+                </p>
+
+                <ol class="list-decimal list-inside space-y-3 font-medium">
+                    <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                        <strong class="text-slate-900">গিটহাব অ্যাকাউন্ট তৈরি:</strong> <a href="https://github.com" target="_blank" class="text-brand-red underline">github.com</a> এ গিয়ে একটি ফ্রি অ্যাকাউন্ট খুলুন।
+                    </li>
+                    <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                        <strong class="text-slate-900">New Repository তৈরি:</strong>
+                        <p class="text-slate-600 font-normal mt-1">ডানপাশের **"+"** নিউ বাটনে ক্লিক করে **"New repository"** সিলেক্ট করুন। Repository-র নাম দিন (যেমন: <code class="bg-slate-200 px-1 rounded">htl-report-system</code>) এবং Public অপশন দিয়ে Create করুন।</p>
+                    </li>
+                    <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                        <strong class="text-slate-900">ফাইল আপলোড:</strong>
+                        <p class="text-slate-600 font-normal mt-1">তৈরি হওয়া পেজে **"uploading an existing file"** এ ক্লিক করে এই কোড ফাইলটির নাম **index.html** দিয়ে আপলোড করে Commit পরিবর্তনের বাটনে ক্লিক করুন।</p>
+                    </li>
+                    <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                        <strong class="text-slate-900">GitHub Pages অন করা:</strong>
+                        <p class="text-slate-600 font-normal mt-1">আপনার Repository এর **Settings -> Pages** এ যান। Branch এর জায়গায় **main** অথবা **master** সিলেক্ট করে Save চাপুন।</p>
+                    </li>
+                    <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                        <strong class="text-slate-900">লাইভ ওয়েবসাইট লিঙ্ক:</strong>
+                        <p class="text-slate-600 font-normal mt-1">১ থেকে ২ মিনিটের মধ্যে আপনার লিঙ্ক রেডি হয়ে যাবে: <br><code class="bg-slate-200 text-brand-darkred font-mono font-bold px-2 py-0.5 rounded mt-1 inline-block">https://your-username.github.io/htl-report-system/</code></p>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="bg-slate-100 p-4 border-t text-right">
+                <button onclick="closeGithubModal()" class="px-5 py-2 bg-slate-800 text-white font-bold text-xs rounded-lg">ঠিক আছে</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
