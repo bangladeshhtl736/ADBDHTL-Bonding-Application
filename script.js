@@ -1,6 +1,6 @@
 let adminItems = ["ON-291351-HTL-HALO-GLB", "GAP-88219-HTL-CORE", "TG-77312-HTL-LABEL"];
 let adminRBOs = ["OLD NAVY", "GAP", "TARGET", "WALMART"];
-let adminCustomers = ["MD LUTFOR RAHMAN", "JAY MILLS FACTORY", "AHMED FASHION"]; // নতুন কাস্টমার ডাটাবেজ
+let adminCustomers = ["JAY MILLS (BANGLADESH) PRIVATE LIMITED", "AHMED FASHION LTD", "STANDARD GROUP"];
 
 window.addEventListener('DOMContentLoaded', async () => {
     await loadComponent('page-dashboard', 'report-gen.html');
@@ -48,6 +48,31 @@ function switchTab(tabId) {
     }
 }
 
+// --- Admin Login & Password System ---
+function handleAdminLogin() {
+    const user = document.getElementById('adminUser').value.trim();
+    const pass = document.getElementById('adminPass').value.trim();
+    const errorBox = document.getElementById('loginError');
+
+    // ইউজারনেম admin এবং পাসওয়ার্ড 12345 (আপনি চাইলে পরিবর্তন করতে পারেন)
+    if (user === "admin" && pass === "12345") {
+        document.getElementById('adminLoginBox').classList.add('hidden');
+        document.getElementById('adminDashboardBox').classList.remove('hidden');
+        errorBox.classList.add('hidden');
+        renderAdminLists();
+    } else {
+        errorBox.classList.remove('hidden');
+    }
+}
+
+function handleAdminLogout() {
+    document.getElementById('adminUser').value = '';
+    document.getElementById('adminPass').value = '';
+    document.getElementById('adminDashboardBox').classList.add('hidden');
+    document.getElementById('adminLoginBox').classList.remove('hidden');
+}
+
+// Calculations & Others
 function runStandaloneCalc() {
     const lineP = parseFloat(document.getElementById('calcLinePress')?.value) || 0;
     const dia = parseFloat(document.getElementById('calcPistonDia')?.value) || 0;
@@ -118,7 +143,7 @@ function previewImage(input, imgId, txtId) {
     }
 }
 
-// Admin Management Logic (Updated with Customer Support)
+// Admin Management & Records
 function renderAdminLists() {
     const itemList = document.getElementById('adminItemList');
     const rboList = document.getElementById('adminRBOList');
@@ -166,11 +191,7 @@ function addAdminItem() {
         renderAdminLists();
     }
 }
-
-function removeAdminItem(idx) {
-    adminItems.splice(idx, 1);
-    renderAdminLists();
-}
+function removeAdminItem(idx) { adminItems.splice(idx, 1); renderAdminLists(); }
 
 function addAdminRBO() {
     const val = document.getElementById('newRBOInput')?.value.trim().toUpperCase();
@@ -180,11 +201,7 @@ function addAdminRBO() {
         renderAdminLists();
     }
 }
-
-function removeAdminRBO(idx) {
-    adminRBOs.splice(idx, 1);
-    renderAdminLists();
-}
+function removeAdminRBO(idx) { adminRBOs.splice(idx, 1); renderAdminLists(); }
 
 function addAdminCustomer() {
     const val = document.getElementById('newCustomerInput')?.value.trim().toUpperCase();
@@ -194,18 +211,16 @@ function addAdminCustomer() {
         renderAdminLists();
     }
 }
-
-function removeAdminCustomer(idx) {
-    adminCustomers.splice(idx, 1);
-    renderAdminLists();
-}
+function removeAdminCustomer(idx) { adminCustomers.splice(idx, 1); renderAdminLists(); }
 
 function populateFilters() {
     const fItem = document.getElementById('filterItemRef');
     const fRBO = document.getElementById('filterRBO');
+    const fCust = document.getElementById('filterCustomer');
 
     if(fItem) fItem.innerHTML = adminItems.map(i => `<option value="${i}">${i}</option>`).join('');
     if(fRBO) fRBO.innerHTML = adminRBOs.map(r => `<option value="${r}">${r}</option>`).join('');
+    if(fCust) fCust.innerHTML = adminCustomers.map(c => `<option value="${c}">${c}</option>`).join('');
 
     applyAdminFilter();
 }
@@ -213,9 +228,11 @@ function populateFilters() {
 function applyAdminFilter() {
     const selectedItem = document.getElementById('filterItemRef')?.value;
     const selectedRBO = document.getElementById('filterRBO')?.value;
+    const selectedCust = document.getElementById('filterCustomer')?.value;
 
     if (selectedItem && document.getElementById('reportHtlRef')) document.getElementById('reportHtlRef').value = selectedItem;
     if (selectedRBO && document.getElementById('reportMasterCustomer')) document.getElementById('reportMasterCustomer').value = selectedRBO;
+    if (selectedCust && document.getElementById('reportVendor')) document.getElementById('reportVendor').value = selectedCust;
 }
 
 function submitSupportTicket(e) {
