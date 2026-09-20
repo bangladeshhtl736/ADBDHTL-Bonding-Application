@@ -47,19 +47,20 @@
                 </div>
             </div>
 
-            <!-- SECTION 1: Customer Information -->
+            <!-- SECTION 1: Customer Information (প্রথম সারিতে ৫ কলাম, পরবর্তী সারিতে ৪ কলাম) -->
             <div class="mt-6 border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
                 <div class="bg-slate-900 text-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider">
                     <i class="fa-solid fa-building mr-1"></i> Customer Information
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-3 text-xs">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 p-3 text-xs">
+                    <!-- Row 1: ৫টি ফিল্ড (Date, Sales Order, HTL Item Ref, RBO, Vendor/Customer) -->
                     <div>
-                        <label class="block font-bold text-slate-600 mb-1.0">Date (DD/MMMM/YY)</label>
+                        <label class="block font-bold text-slate-600 mb-0.5">Date (DD/MMM/YY)</label>
                         <input type="text" id="reportDate" value="21-Sep-2026" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Sales Order Number</label>
-                        <input type="text" id="reportSalesOrder" value="SO No-992810" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-mono font-bold text-slate-800">
+                        <input type="text" id="reportSalesOrder" value="SO-992810" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-mono font-bold text-slate-800">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">HTL Item Ref No</label>
@@ -69,12 +70,12 @@
                         <label class="block font-bold text-slate-600 mb-0.5">Master Customer (RBO)</label>
                         <input type="text" id="reportMasterCustomer" value="OLD NAVY" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
-                    </div>
-                     
-                    <div class="col-span-2">
+                    <div class="col-span-2 sm:col-span-2 lg:col-span-1">
                         <label class="block font-bold text-slate-600 mb-0.5">Vendor Name / Customer</label>
-                        <input type="text" id="reportVendor" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
+                        <input type="text" id="reportVendor" value="JAY MILLS PRIVATE LIMITED" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
+
+                    <!-- Row 2: ৪টি ফিল্ড (PO/Style, Fabric Color, Quality Tag, Contact Person Name) -->
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Customer PO/Style</label>
                         <input type="text" id="reportPO" value="All Styles" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
@@ -84,12 +85,16 @@
                         <input type="text" id="reportFabricColor" value="ALL" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
                     <div>
-                       <label class="block font-bold text-slate-600 mb-0.5">Quality Tag</label>
+                        <label class="block font-bold text-slate-600 mb-0.5">Quality Tag</label>
                         <input type="text" id="reportQuality" value="AG PASS" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
+                    <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Contact Person Name</label>
                         <input type="text" id="reportContactName" value="Md. Rahim Uddin" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
+                    <div class="col-span-2 sm:col-span-2 lg:col-span-1 hidden lg:block"></div><!-- ফাঁকা স্পেস ব্যালেন্স করার জন্য -->
+
+                    <!-- Row 3: বাকি ফিল্ডগুলো (Contact Number, Representative Name, Rep Number, Address) -->
                     <div>
                         <label class="block font-bold text-slate-600 mb-0.5">Contact Person Number</label>
                         <input type="text" id="reportContactNo" value="+8801711000000" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
@@ -102,7 +107,7 @@
                         <label class="block font-bold text-slate-600 mb-0.5">Representative Number</label>
                         <input type="text" id="reportRepNo" value="+8801811000000" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
-                    <div class="col-span-2 sm:col-span-3 md:col-span-4">
+                    <div class="col-span-2 sm:col-span-2 lg:col-span-2">
                         <label class="block font-bold text-slate-600 mb-0.5">Customer Address</label>
                         <input type="text" id="reportAddress" value="Plot # 12, Export Processing Zone, Savar, Dhaka" class="w-full bg-white border border-slate-300 rounded px-2 py-1 font-semibold">
                     </div>
