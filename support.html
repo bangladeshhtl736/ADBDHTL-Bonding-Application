@@ -3,29 +3,65 @@
         <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-headset text-2xl"></i></div>
         <div>
             <h2 class="text-xl font-bold text-slate-900">Online Support & Ticket Desk</h2>
-            <p class="text-xs text-slate-500">অনলাইন সাপোর্ট টিমকে বার্তা পাঠান বা দ্রুত সার্ভিস টিকিট বুক করুন</p>
+            <p class="text-xs text-slate-500">কাস্টমারদের সাপোর্ট আবেদন এবং তার উত্তর প্রদান করার সিস্টেম</p>
         </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <form onsubmit="submitSupportTicket(event)" class="space-y-4">
-            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">আপনার নাম / ইঞ্জিনিয়ারের নাম</label><input type="text" required id="suppName" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs"></div>
-            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">কাস্টমার ফ্যাক্টরি / Vendor Name</label><input type="text" required id="suppFactory" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs"></div>
-            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিষয়</label><select id="suppSubject" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold"><option>Bonding Machine Temperature Mismatch</option><option>Applied Pressure Calculation Help</option><option>Heat Seal Label Quality Issue</option></select></div>
-            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">বিস্তারিত বিবরণ</label><textarea rows="3" required id="suppDetails" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs" placeholder="আপনার সমস্যাটি বিস্তারিত লিখুন..."></textarea></div>
-            <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs transition"><i class="fa-solid fa-paper-plane mr-1"></i> টিকিট জমা দিন</button>
-        </form>
+        <!-- বাম পাশ: কাস্টমার সাপোর্ট আবেদন ফর্ম -->
+        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+            <h3 class="font-bold text-sm text-slate-900 mb-3 uppercase tracking-wider"><i class="fa-solid fa-ticket mr-1 text-brand-red"></i> নতুন সাপোর্ট আবেদন ফর্ম (Customer Ticket Form)</h3>
+            <form onsubmit="submitSupportTicket(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">কাস্টমার বা আবেদনকারীর নাম</label>
+                    <input type="text" required id="suppName" placeholder="আপনার নাম লিখুন..." class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">ফ্যাক্টরি / Vendor Name</label>
+                    <input type="text" required id="suppFactory" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিষয়</label>
+                    <select id="suppSubject" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white">
+                        <option>Bonding Machine Temperature Mismatch</option>
+                        <option>Applied Pressure Calculation Help</option>
+                        <option>Heat Seal Label Quality / Peeling Issue</option>
+                        <option>Other Technical Breakdown</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিস্তারিত বিবরণ</label>
+                    <textarea rows="3" required id="suppDetails" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white" placeholder="আপনার সমস্যাটি বিস্তারিত এখানে লিখুন..."></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg text-xs transition shadow">
+                    <i class="fa-solid fa-paper-plane mr-1"></i> সাপোর্ট টিকিট জমা দিন
+                </button>
+            </form>
+        </div>
 
-        <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col justify-between h-[380px]">
+        <!-- ডান পাশ: জমা হওয়া টিকিটের তালিকা এবং উত্তর দেওয়ার অপশন -->
+        <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col justify-between h-[460px]">
             <div class="font-bold text-xs text-slate-700 pb-2 border-b border-slate-200 flex justify-between items-center">
-                <span><i class="fa-solid fa-circle text-emerald-500 text-[8px] mr-1"></i> Live Support Chat</span>
+                <span><i class="fa-solid fa-list-ul text-brand-red mr-1"></i> কাস্টমার টিকিট ও উত্তরের ডেক্স</span>
+                <span id="ticketCountBadge" class="bg-brand-red text-white px-2 py-0.5 rounded text-[10px]">0 Tickets</span>
             </div>
-            <div id="chatBox" class="flex-grow my-3 space-y-3 overflow-y-auto custom-scrollbar text-xs">
-                <div class="bg-white p-2.5 rounded-lg border border-slate-200 max-w-[85%] text-slate-700"><strong>Support Agent:</strong> হ্যালো! Avery Dennison HTL টেকনিক্যাল টিমে স্বাগতম।</div>
+
+            <!-- টিকিট লিস্ট কন্টেইনার -->
+            <div id="ticketListBox" class="flex-grow my-2 space-y-2 overflow-y-auto custom-scrollbar text-xs">
+                <!-- ডায়নামিক টিকিট এখানে দেখাবে -->
+                <div class="text-slate-400 text-center py-10">কোনো নতুন টিকিট জমা হয়নি।</div>
             </div>
-            <div class="flex gap-2">
-                <input type="text" id="chatInput" placeholder="এখানে মেসেজ লিখুন..." class="flex-grow p-2 border border-slate-300 rounded text-xs">
-                <button onclick="sendChatMessage()" class="px-4 bg-brand-red text-white text-xs font-bold rounded hover:bg-brand-darkred">Send</button>
+
+            <!-- উত্তর লেখার বক্স -->
+            <div id="replySection" class="hidden border-t border-slate-200 pt-2 space-y-2">
+                <div class="text-[11px] font-bold text-slate-700 flex justify-between">
+                    <span>রিপ্লাই দেওয়া হচ্ছে: <span id="activeTicketTitle" class="text-brand-red"></span></span>
+                    <button onclick="closeReplyBox()" class="text-red-600 hover:underline">বন্ধ করুন</button>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="replyInput" placeholder="আপনার উত্তর বা সমাধান এখানে লিখুন..." class="flex-grow p-2 border border-slate-300 rounded text-xs bg-white">
+                    <button onclick="sendTicketReply()" class="px-4 bg-slate-900 text-white text-xs font-bold rounded hover:bg-slate-800">রিপ্লাই দিন</button>
+                </div>
             </div>
         </div>
     </div>
