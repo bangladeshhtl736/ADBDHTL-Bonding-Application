@@ -255,3 +255,101 @@ function sendChatMessage() {
 
 function openGithubModal() { document.getElementById('githubModal')?.classList.remove('hidden'); }
 function closeGithubModal() { document.getElementById('githubModal')?.classList.add('hidden'); }
+
+// সাপোর্ট টিকিট সংরক্ষণ করার এরে
+let supportTickets = [
+    { id: 1, name: "Md. Rahim", factory: "JAY MILLS", subject: "Temperature Mismatch", details: "সেটিং ২৩০ দিলেও ১৬৬ পাওয়া যাচ্ছে।", reply: "থার্মোকাপল সেন্সর চেক করুন।" }
+];
+
+// পেজ লোড হওয়ার পর টিকিট রেন্ডার করা
+window.addEventListener('DOMContentLoaded', () => {
+    renderTickets();
+});
+
+// কাস্টমার কর্তৃক টিকিট জমা দেওয়ার ফাংশন
+function submitSupportTicket(e) {
+    e.preventDefault();
+    const name = document.getElementById('suppName').value.trim();
+    const factory = document.getElementById('suppFactory').value.trim();
+    const subject = document.getElementById('suppSubject').value;
+    const details = document.getElementById('suppDetails').value.trim();
+
+    const newTicket = {
+        id: Date.now(),
+        name: name,
+        factory: factory,
+        subject: subject,
+        details: details,
+        reply: null // প্রথমে কোনো উত্তর থাকবে না
+    };
+
+    supportTickets.unshift(newTicket); // নতুন টিকিট সবার উপরে যোগ হবে
+    renderTickets();
+
+    alert(`ধন্যবাদ ${name}! আপনার সাপোর্ট টিকিটটি সফলভাবে জমা হয়েছে।`);
+    document.getElementById('suppName').value = '';
+    document.getElementById('suppDetails').value = '';
+}
+
+// টিকিট লিস্ট স্ক্রিনে দেখানোর ফাংশন
+function renderTickets() {
+    const ticketBox = document.getElementById('ticketListBox');
+    const badge = document.getElementById('ticketCountBadge');
+    if(!ticketBox) return;
+
+    badge.innerText = `${supportTickets.length} Tickets`;
+
+    if(supportTickets.length === 0) {
+        ticketBox.innerHTML = `<div class="text-slate-400 text-center py-10">কোনো নতুন টিকিট জমা হয়নি।</div>`;
+        return;
+    }
+
+    ticketBox.innerHTML = supportTickets.map(t => `
+        <div onclick="selectTicketForReply(${t.id})" class="bg-white p-3 rounded-lg border border-slate-200 hover:border-brand-red cursor-pointer transition space-y-1">
+            <div class="flex justify-between items-center font-bold text-slate-800">
+                <span><i class="fa-solid fa-user-circle text-brand-red mr-1"></i> ${t.name} (${t.factory})</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded ${t.reply ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                    ${t.reply ? 'Solved / Replied' : 'Pending'}
+                </span>
+            </div>
+            <p class="font-semibold text-slate-700 text-[11px]"><span class="text-slate-500">বিষয়:</span> ${t.subject}</p>
+            <p class="text-slate-600 text-[11px] truncate"><span class="text-slate-500">বিবরণ:</span> ${t.details}</p>
+            ${t.reply ? `<p class="text-emerald-700 bg-emerald-50 p-1.5 rounded mt-1 text-[11px]"><strong>উত্তর:</strong> ${t.reply}</p>` : `<p class="text-[10px] text-brand-red italic">উত্তর দেওয়ার জন্য এখানে ক্লিক করুন...</p>`}
+        </div>
+    `).join('');
+}
+
+// নির্দিষ্ট টিকিটে ক্লিক করলে উত্তর দেওয়ার বক্স ওপেন হওয়া
+let activeTicketId = null;
+function selectTicketForReply(id) {
+    activeTicketId = id;
+    const ticket = supportTickets.find(t => t.id === id);
+    if(ticket) {
+        document.getElementById('activeTicketTitle').innerText = `${ticket.name} (${ticket.subject})`;
+        document.getElementById('replySection').classList.remove('hidden');
+        document.getElementById('replyInput').focus();
+    }
+}
+
+// উত্তর সাবমিট করার ফাংশন
+function sendTicketReply() {
+    const replyText = document.getElementById('replyInput').value.trim();
+    if(!replyText) {
+        alert('দয়া করে উত্তর লিখুন!');
+        return;
+    }
+
+    const ticket = supportTickets.find(t => t.id === activeTicketId);
+    if(ticket) {
+        ticket.reply = replyText;
+        renderTickets();
+        closeReplyBox();
+        alert('সফলভাবে উত্তর প্রদান করা হয়েছে!');
+    }
+}
+
+function closeReplyBox() {
+    activeTicketId = null;
+    document.getElementById('replyInput').value = '';
+    document.getElementById('replySection').classList.add('hidden');
+}
