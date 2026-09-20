@@ -3,57 +3,81 @@
         <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-user-gear text-2xl"></i></div>
         <div>
             <h2 class="text-xl font-bold text-slate-900">Admin Panel & Master Database</h2>
-            <p class="text-xs text-slate-500">Item References, RBOs এবং Customers ডাটাবেজ ইনপুট ও ফিল্টার ম্যানেজমেন্ট</p>
+            <p class="text-xs text-slate-500">Item References, RBOs এবং Customer Name ডাটাবেজ ম্যানেজমেন্ট</p>
         </div>
     </div>
 
-    <!-- ৩টি কলামে সাজানো (Item Ref, RBOs, Customers) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <!-- ১. Item Reference Management -->
-        <div class="space-y-4">
-            <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
-                <span>Item Reference</span>
-                <span id="itemCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 Items</span>
-            </h3>
-            <div class="flex gap-2">
-                <input type="text" id="newItemInput" placeholder="যেমন: ON-291351..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-mono font-semibold">
-                <button onclick="addAdminItem()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
-            </div>
-            <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
-                <ul id="adminItemList" class="divide-y divide-slate-200 text-xs font-mono"></ul>
-            </div>
+    <!-- Admin Login Section (প্রথমে এটি দেখাবে) -->
+    <div id="adminLoginBox" class="max-w-md mx-auto bg-slate-50 p-6 rounded-xl border border-slate-200 space-y-4">
+        <h3 class="font-bold text-sm text-slate-900 text-center uppercase tracking-wider"><i class="fa-solid fa-lock text-brand-red mr-1"></i> Admin Login Required</h3>
+        <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Username</label>
+            <input type="text" id="adminUser" placeholder="admin" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
+            <input type="password" id="adminPass" placeholder="••••••••" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold">
+        </div>
+        <button onclick="handleAdminLogin()" class="w-full py-2.5 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg text-xs transition">
+            লগইন করুন
+        </button>
+        <p id="loginError" class="text-red-600 text-xs text-center hidden font-bold">ইউজারনেম অথবা পাসওয়ার্ড ভুল হয়েছে!</p>
+    </div>
+
+    <!-- Admin Panel Dashboard (লগইন করার পর এটি শো করবে) -->
+    <div id="adminDashboardBox" class="hidden space-y-6">
+        <div class="flex justify-between items-center bg-slate-100 p-3 rounded-lg">
+            <span class="text-xs font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Admin Logged In Successfully</span>
+            <button onclick="handleAdminLogout()" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded">লগআউট</button>
         </div>
 
-        <!-- ২. RBO Management -->
-        <div class="space-y-4">
-            <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
-                <span>RBO Management</span>
-                <span id="rboCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 RBOs</span>
-            </h3>
-            <div class="flex gap-2">
-                <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold">
-                <button onclick="addAdminRBO()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- ১. Item Reference Management -->
+            <div class="space-y-4">
+                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
+                    <span>Item Reference</span>
+                    <span id="itemCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 Items</span>
+                </h3>
+                <div class="flex gap-2">
+                    <input type="text" id="newItemInput" placeholder="যেমন: ON-291351..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-mono font-semibold">
+                    <button onclick="addAdminItem()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+                </div>
+                <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
+                    <ul id="adminItemList" class="divide-y divide-slate-200 text-xs font-mono"></ul>
+                </div>
             </div>
-            <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
-                <ul id="adminRBOList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
-            </div>
-        </div>
 
-        <!-- ৩. Customer Name Management (নতুন যুক্ত করা হয়েছে) -->
-        <div class="space-y-4">
-            <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
-                <span>Customer Management</span>
-                <span id="customerCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 Customers</span>
-            </h3>
-            <div class="flex gap-2">
-                <input type="text" id="newCustomerInput" placeholder="যেমন: MD LUTFOR..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold">
-                <button onclick="addAdminCustomer()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+            <!-- ২. RBO Management -->
+            <div class="space-y-4">
+                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
+                    <span>RBO Management</span>
+                    <span id="rboCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 RBOs</span>
+                </h3>
+                <div class="flex gap-2">
+                    <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold">
+                    <button onclick="addAdminRBO()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+                </div>
+                <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
+                    <ul id="adminRBOList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
+                </div>
             </div>
-            <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
-                <ul id="adminCustomerList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
-            </div>
-        </div>
 
+            <!-- ৩. Customer Name Management (নতুন কলাম) -->
+            <div class="space-y-4">
+                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
+                    <span>Customer Name</span>
+                    <span id="customerCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 Customers</span>
+                </h3>
+                <div class="flex gap-2">
+                    <input type="text" id="newCustomerInput" placeholder="যেমন: JAY MILLS..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold">
+                    <button onclick="addAdminCustomer()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+                </div>
+                <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
+                    <ul id="adminCustomerList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
