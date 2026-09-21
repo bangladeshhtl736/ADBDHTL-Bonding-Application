@@ -1,17 +1,30 @@
 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-    <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
-        <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-screwdriver-wrench text-2xl"></i></div>
-        <div>
-            <h2 class="text-xl font-bold text-slate-900">Bonding Troubleshooting & Solution Hub</h2>
-            <p class="text-xs text-slate-500">মেশিন ও বন্ডিং জনিত ৩০টি গুরুত্বপূর্ণ সমস্যার টেকনিক্যাল সমাধান</p>
+    <!-- হেডার অংশ: শিরোনাম, Facing Issue টেক্সট এবং ফিল্টার ড্রপডাউন -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-6">
+        <div class="flex items-center gap-3">
+            <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-screwdriver-wrench text-2xl"></i></div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-900">Bonding Troubleshooting & Solution Hub</h2>
+                <p class="text-xs text-slate-500">মেশিন ও বন্ডিং জনিত ৩০টি গুরুত্বপূর্ণ সমস্যার টেকনিক্যাল সমাধান</p>
+            </div>
+        </div>
+
+        <!-- ডানপাশের Facing Issue এবং ফিল্টার অপশন -->
+        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+            <span class="text-xs font-bold text-slate-700 whitespace-nowrap"><i class="fa-solid fa-filter text-brand-red mr-1"></i> Facing Issue:</span>
+            <select id="problemFilter" onchange="filterProblemsList()" class="bg-slate-50 border border-slate-300 text-xs rounded-lg p-2 font-semibold text-slate-800 focus:ring-brand-red">
+                <option value="all">সকল সমস্যা (৩০টি)</option>
+                <option value="group1">প্রবলেম ০১ থেকে ১৫ (গ্রুপ-১)</option>
+                <option value="group2">প্রবলেম ১৬ থেকে ৩০ (গ্রুপ-২)</option>
+            </select>
         </div>
     </div>
 
-    <!-- ৩ কলাম বিশিষ্ট গ্রিড লেআউট -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+    <!-- ৩ কলাম বিশিষ্ট গ্রিড লেআউট (৩০টি সমস্যা) -->
+    <div id="solutionGridContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3">
         
         <!-- Problem 01 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-red-100 text-brand-red rounded font-bold text-xs"><i class="fa-solid fa-temperature-arrow-down"></i></span>
                 <div>
@@ -22,7 +35,7 @@
         </div>
 
         <!-- Problem 02 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-800 rounded font-bold text-xs"><i class="fa-solid fa-box-archive"></i></span>
                 <div>
@@ -33,7 +46,7 @@
         </div>
 
         <!-- Problem 03 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-blue-100 text-blue-800 rounded font-bold text-xs"><i class="fa-solid fa-rug"></i></span>
                 <div>
@@ -44,7 +57,7 @@
         </div>
 
         <!-- Problem 04 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-purple-100 text-purple-800 rounded font-bold text-xs"><i class="fa-solid fa-fire"></i></span>
                 <div>
@@ -55,7 +68,7 @@
         </div>
 
         <!-- Problem 05 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-emerald-100 text-emerald-800 rounded font-bold text-xs"><i class="fa-solid fa-gauge"></i></span>
                 <div>
@@ -66,7 +79,7 @@
         </div>
 
         <!-- Problem 06 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-indigo-100 text-indigo-800 rounded font-bold text-xs"><i class="fa-solid fa-droplet"></i></span>
                 <div>
@@ -77,7 +90,7 @@
         </div>
 
         <!-- Problem 07 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-rose-100 text-rose-800 rounded font-bold text-xs"><i class="fa-solid fa-clock"></i></span>
                 <div>
@@ -88,7 +101,7 @@
         </div>
 
         <!-- Problem 08 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-900 rounded font-bold text-xs"><i class="fa-solid fa-layer-group"></i></span>
                 <div>
@@ -99,7 +112,7 @@
         </div>
 
         <!-- Problem 09 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-cyan-100 text-cyan-800 rounded font-bold text-xs"><i class="fa-solid fa-shirt"></i></span>
                 <div>
@@ -110,7 +123,7 @@
         </div>
 
         <!-- Problem 10 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-teal-100 text-teal-800 rounded font-bold text-xs"><i class="fa-solid fa-bolt"></i></span>
                 <div>
@@ -121,7 +134,7 @@
         </div>
 
         <!-- Problem 11 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-pink-100 text-pink-800 rounded font-bold text-xs"><i class="fa-solid fa-circle-exclamation"></i></span>
                 <div>
@@ -132,7 +145,7 @@
         </div>
 
         <!-- Problem 12 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-violet-100 text-violet-800 rounded font-bold text-xs"><i class="fa-solid fa-arrows-split-up-and-left"></i></span>
                 <div>
@@ -143,7 +156,7 @@
         </div>
 
         <!-- Problem 13 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-orange-100 text-orange-800 rounded font-bold text-xs"><i class="fa-solid fa-wind"></i></span>
                 <div>
@@ -154,7 +167,7 @@
         </div>
 
         <!-- Problem 14 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-lime-100 text-lime-900 rounded font-bold text-xs"><i class="fa-solid fa-hand"></i></span>
                 <div>
@@ -165,7 +178,7 @@
         </div>
 
         <!-- Problem 15 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-stone-200 text-stone-800 rounded font-bold text-xs"><i class="fa-solid fa-broom"></i></span>
                 <div>
@@ -176,7 +189,7 @@
         </div>
 
         <!-- Problem 16 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-red-100 text-red-900 rounded font-bold text-xs"><i class="fa-solid fa-stopwatch"></i></span>
                 <div>
@@ -187,7 +200,7 @@
         </div>
 
         <!-- Problem 17 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-sky-100 text-sky-800 rounded font-bold text-xs"><i class="fa-solid fa-temperature-full"></i></span>
                 <div>
@@ -198,7 +211,7 @@
         </div>
 
         <!-- Problem 18 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-emerald-100 text-emerald-900 rounded font-bold text-xs"><i class="fa-solid fa-snowflake"></i></span>
                 <div>
@@ -209,7 +222,7 @@
         </div>
 
         <!-- Problem 19 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-800 rounded font-bold text-xs"><i class="fa-solid fa-water"></i></span>
                 <div>
@@ -220,7 +233,7 @@
         </div>
 
         <!-- Problem 20 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-purple-100 text-purple-900 rounded font-bold text-xs"><i class="fa-solid fa-triangle-exclamation"></i></span>
                 <div>
@@ -231,7 +244,7 @@
         </div>
 
         <!-- Problem 21 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-blue-100 text-blue-900 rounded font-bold text-xs"><i class="fa-solid fa-rotate"></i></span>
                 <div>
@@ -242,7 +255,7 @@
         </div>
 
         <!-- Problem 22 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-rose-100 text-rose-900 rounded font-bold text-xs"><i class="fa-solid fa-network-wired"></i></span>
                 <div>
@@ -253,7 +266,7 @@
         </div>
 
         <!-- Problem 23 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-indigo-100 text-indigo-900 rounded font-bold text-xs"><i class="fa-solid fa-shield-halved"></i></span>
                 <div>
@@ -264,7 +277,7 @@
         </div>
 
         <!-- Problem 24 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-teal-100 text-teal-900 rounded font-bold text-xs"><i class="fa-solid fa-sliders"></i></span>
                 <div>
@@ -275,7 +288,7 @@
         </div>
 
         <!-- Problem 25 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-900 rounded font-bold text-xs"><i class="fa-solid fa-arrows-down-to-line"></i></span>
                 <div>
@@ -286,7 +299,7 @@
         </div>
 
         <!-- Problem 26 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-cyan-100 text-cyan-900 rounded font-bold text-xs"><i class="fa-solid fa-sun"></i></span>
                 <div>
@@ -297,7 +310,7 @@
         </div>
 
         <!-- Problem 27 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-red-100 text-red-800 rounded font-bold text-xs"><i class="fa-solid fa-triangle-exclamation"></i></span>
                 <div>
@@ -308,7 +321,7 @@
         </div>
 
         <!-- Problem 28 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-green-100 text-green-800 rounded font-bold text-xs"><i class="fa-solid fa-list-check"></i></span>
                 <div>
@@ -319,7 +332,7 @@
         </div>
 
         <!-- Problem 29 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-orange-100 text-orange-900 rounded font-bold text-xs"><i class="fa-solid fa-gears"></i></span>
                 <div>
@@ -330,7 +343,7 @@
         </div>
 
         <!-- Problem 30 -->
-        <div class="border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+        <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-slate-200 text-slate-900 rounded font-bold text-xs"><i class="fa-solid fa-clipboard-check"></i></span>
                 <div>
