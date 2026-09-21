@@ -2,8 +2,8 @@
     <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
         <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-user-gear text-2xl"></i></div>
         <div>
-            <h2 class="text-xl font-bold text-slate-900">Admin Panel & Smart Mapping Database</h2>
-            <p class="text-xs text-slate-500">কাস্টমার অনুযায়ী নির্দিষ্ট Item Reference এবং RBO ম্যাপিং ম্যানেজমেন্ট</p>
+            <h2 class="text-xl font-bold text-slate-900">Admin Panel & Master Database</h2>
+            <p class="text-xs text-slate-500">Item References, RBOs এবং Customer Name ডাটাবেজ ম্যানেজমেন্ট</p>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
         <button onclick="handleAdminLogin()" class="w-full py-2.5 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg text-xs transition">
             লগইন করুন
         </button>
-        <p id="loginError" class="text-red-600 text-xs text-center hidden font-bold">ইউজারনেম অথবা পাসওয়ার্ড ভুল হয়েছে!</p>
+        <p id="loginError" class="text-red-600 text-xs text-center hidden font-bold">ইউজারনেম অথবা পাসওয়ার্ড ভুল হয়েছে!</p>
     </div>
 
     <!-- Admin Panel Dashboard -->
@@ -33,56 +33,63 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <!-- ১. Customer Management -->
-            <div class="space-y-4">
-                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
-                    <span>1. Customer Name</span>
-                    <span id="customerCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 Customers</span>
-                </h3>
-                <div class="flex gap-2">
-                    <input type="text" id="newCustomerInput" placeholder="যেমন: JAY MILLS..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold">
-                    <button onclick="addAdminCustomer()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
-                </div>
-                <div class="border border-slate-200 rounded-lg max-h-60 overflow-y-auto custom-scrollbar">
-                    <ul id="adminCustomerList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
-                </div>
-            </div>
-
-            <!-- ২. Item Reference Management (কাস্টমারের সাথে লিংক করার জন্য) -->
-            <div class="space-y-4">
-                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
-                    <span>2. Item Reference (By Customer)</span>
-                    <span id="itemCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 Items</span>
+            <!-- ১. Item Reference Management (By Customer) -->
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between items-center">
+                    <span>Item Reference</span>
+                    <span id="itemCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Items</span>
                 </h3>
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-500 mb-1">কাস্টমার সিলেক্ট করুন:</label>
-                    <select id="mapItemCustomerSelect" class="w-full p-2 border border-slate-300 rounded text-xs font-semibold bg-slate-50 mb-2"></select>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">কাস্টমার সিলেক্ট করুন:</label>
+                    <select id="itemCustomerSelect" class="w-full p-2 border border-slate-300 rounded text-xs bg-white font-semibold">
+                        <!-- ডায়নামিক কাস্টমার লিস্ট -->
+                    </select>
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" id="newItemInput" placeholder="যেমন: ON-291351..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-mono font-semibold">
+                    <input type="text" id="newItemInput" placeholder="যেমন: ON-291351..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-mono font-semibold bg-white">
                     <button onclick="addAdminItem()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
                 </div>
-                <div class="border border-slate-200 rounded-lg max-h-48 overflow-y-auto custom-scrollbar">
+                <div class="border border-slate-200 bg-white rounded-lg max-h-50 overflow-y-auto custom-scrollbar">
                     <ul id="adminItemList" class="divide-y divide-slate-200 text-xs font-mono"></ul>
                 </div>
             </div>
 
-            <!-- ৩. RBO Management (কাস্টমারের সাথে লিংক করার জন্য) -->
-            <div class="space-y-4">
-                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between">
-                    <span>3. RBO Management (By Customer)</span>
-                    <span id="rboCountTag" class="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">0 RBOs</span>
+            <!-- ২. RBO Management (By Customer) -->
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between items-center">
+                    <span>RBO Management</span>
+                    <span id="rboCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 RBOs</span>
                 </h3>
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-500 mb-1">কাস্টমার সিলেক্ট করুন:</label>
-                    <select id="mapRBOCustomerSelect" class="w-full p-2 border border-slate-300 rounded text-xs font-semibold bg-slate-50 mb-2"></select>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">কাস্টমার সিলেক্ট করুন:</label>
+                    <select id="rboCustomerSelect" class="w-full p-2 border border-slate-300 rounded text-xs bg-white font-semibold">
+                        <!-- ডায়নামিক কাস্টমার লিস্ট -->
+                    </select>
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold">
+                    <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold bg-white">
                     <button onclick="addAdminRBO()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
                 </div>
-                <div class="border border-slate-200 rounded-lg max-h-48 overflow-y-auto custom-scrollbar">
+                <div class="border border-slate-200 bg-white rounded-lg max-h-50 overflow-y-auto custom-scrollbar">
                     <ul id="adminRBOList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
+                </div>
+            </div>
+
+            <!-- ৩. Customer Name Management -->
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between items-center">
+                    <span>Customer Name</span>
+                    <span id="customerCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Customers</span>
+                </h3>
+                <div class="pt-5">
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">নতুন কাস্টমার যোগ করুন:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="newCustomerInput" placeholder="যেমন: JAY MILLS..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold bg-white">
+                        <button onclick="addAdminCustomer()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+                    </div>
+                </div>
+                <div class="border border-slate-200 bg-white rounded-lg max-h-50 overflow-y-auto custom-scrollbar mt-2">
+                    <ul id="adminCustomerList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
                 </div>
             </div>
 
