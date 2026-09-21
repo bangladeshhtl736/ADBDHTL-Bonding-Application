@@ -1,11 +1,11 @@
 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-    <!-- হেডার অংশ: শিরোনাম, Facing Issue টেক্সট এবং ফিল্টার ড্রপডাউন -->
+    <!-- হেডার অংশ: শিরোনাম এবং নতুন ফিল্টার ড্রপডাউন অপশন -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-6">
         <div class="flex items-center gap-3">
             <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-screwdriver-wrench text-2xl"></i></div>
             <div>
                 <h2 class="text-xl font-bold text-slate-900">Bonding Troubleshooting & Solution Hub</h2>
-                <p class="text-xs text-slate-500">মেশিন ও বন্ডিং জনিত ৩০টি গুরুত্বপূর্ণ সমস্যার টেকনিক্যাল সমাধান</p>
+                <p class="text-xs text-slate-500">মেশিন ও বন্ডিং জনিত সমস্যার সুনির্দিষ্ট টেকনিক্যাল সমাধান</p>
             </div>
         </div>
 
@@ -13,342 +13,446 @@
         <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
             <span class="text-xs font-bold text-slate-700 whitespace-nowrap"><i class="fa-solid fa-filter text-brand-red mr-1"></i> Facing Issue:</span>
             <select id="problemFilter" onchange="filterProblemsList()" class="bg-slate-50 border border-slate-300 text-xs rounded-lg p-2 font-semibold text-slate-800 focus:ring-brand-red">
-                <option value="all">সকল সমস্যা (৩০টি)</option>
+                <option value="all">সকল সমস্যা (All Issues)</option>
+                <option value="peel">1. Peel off</option>
+                <option value="shiny">2. Shiny Mark</option>
+                <option value="glue">3. Glue Mark</option>
+                <option value="cracking">4. Cracking</option>
+                <option value="illegible">5. Illegible Text</option>
+                <option value="bubble">6. Bubble Issue</option>
+                <option value="tiedpeel">7. Tied Peel</option>
+                <option value="washfail">8. Wash Fail</option>
+                <option value="newmachine">9. New Machine Setup</option>
+                <option value="mixing">10. Mixing Issue</option>
+                <option value="shortage">11. Shortage</option>
+                <option value="quality">12. Quality Issue</option>
                 <option value="group1">প্রবলেম ০১ থেকে ১৫ (গ্রুপ-১)</option>
                 <option value="group2">প্রবলেম ১৬ থেকে ৩০ (গ্রুপ-২)</option>
             </select>
         </div>
     </div>
 
-    <!-- ৩ কলাম বিশিষ্ট গ্রিড লেআউট (৩০টি সমস্যা) -->
+    <!-- ৩ কলাম বিশিষ্ট গ্রিড লেআউট (নতুন ১২টি সহ সমস্ত সমস্যা) -->
     <div id="solutionGridContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3">
         
-        <!-- Problem 01 -->
+        <!-- নতুন ১২টি সুনির্দিষ্ট সমস্যার কার্ড -->
+        <div class="problem-card peel border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-red-100 text-brand-red rounded font-bold text-xs"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Peel off (লেবেল উঠে যাওয়া)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> Dwell Time, তাপমাত্রা এবং Applied Pressure সঠিক পরিমাণে বাড়িয়ে ফ্যাব্রিকে বন্ডিং নিশ্চিত করুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card shiny border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-amber-100 text-amber-800 rounded font-bold text-xs"><i class="fa-solid fa-sun"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Shiny Mark (উজ্জ্বল দাগ পড়া)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> টেম্পারেচার বা প্রেশার বেশি হওয়ার কারণে ফ্যাব্রিক গ্লেজ হয়ে গেলে তা কমিয়ে দিন এবং টেফলন শিট ব্যবহার করুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card glue border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-blue-100 text-blue-800 rounded font-bold text-xs"><i class="fa-solid fa-droplet"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Glue Mark (আঠার অতিরিক্ত দাগ)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> লেবেলের ধার ঘেঁষে অতিরিক্ত আঠা গলে গেলে তাপমাত্রা সামান্য হ্রাস করুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card cracking border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-purple-100 text-purple-800 rounded font-bold text-xs"><i class="fa-solid fa-burst"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Cracking (লেবেল ফেটে যাওয়া)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ওভার-হিটিংয়ের কারণে লেবেল ক্র্যাক করতে পারে। সেটিং টেম্পারেচার ও প্রেসার রিকমেন্ডেড সীমার মধ্যে রাখুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card illegible border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-emerald-100 text-emerald-800 rounded font-bold text-xs"><i class="fa-solid fa-font"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Illegible Text (অস্পষ্ট লেখা)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> প্রেশার অসমান হলে লেখা অস্পষ্ট হতে পারে। রাবার প্যাডের সমতলতা ও প্রেশার চেক করুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card bubble border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-indigo-100 text-indigo-800 rounded font-bold text-xs"><i class="fa-solid fa-circle"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Bubble Issue (বাবল বা বায়ু বুদবুদ সৃষ্টি)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> কাপড়ে ময়েশ্চার বা বাতাসের উপস্থিতির কারণে বাবল হতে পারে। প্রি-প্রেস করে কাপড় শুকিয়ে নিন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card tiedpeel border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-rose-100 text-rose-800 rounded font-bold text-xs"><i class="fa-solid fa-link-slash"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Tied Peel (অসম্পূর্ণ বা জোড়া লাগানো পিলিং)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> কুলিংয়ের সময় ভুল হলে এই সমস্যা হয়। সঠিক তাপমাত্রা ও ঠান্ডা হওয়ার পর পেপার তুলুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card washfail border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-cyan-100 text-cyan-800 rounded font-bold text-xs"><i class="fa-solid fa-water"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Wash Fail (ওয়াশ টেস্ট ফেইল)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> এপ্লাইড প্রেসার ক্যালকুলেটর অনুযায়ী সঠিক বল প্রয়োগ এবং নির্দিষ্ট সময় ধরে সিলিং নিশ্চিত করুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card newmachine border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-teal-100 text-teal-800 rounded font-bold text-xs"><i class="fa-solid fa-gears"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">New Machine Setup (নতুন মেশিন সেটআপ)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> নতুন মেশিনের থার্মোকাপল, পিষ্টন ডায়ামিটার এবং লাইন প্রেসার ক্যালিব্রেশন করে নিন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card mixing border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-pink-100 text-pink-800 rounded font-bold text-xs"><i class="fa-solid fa-shuffle"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Mixing Issue (আইটেম বা ব্যাচ মিক্সিং)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> প্রোডাকশনের পূর্বে আইটেম রেফারেন্স এবং ব্যাচ কোড ভালোভাবে যাচাই করে নিন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card shortage border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-orange-100 text-orange-800 rounded font-bold text-xs"><i class="fa-solid fa-boxes-packing"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Shortage (পরিমাণ কম বা শর্টেজ)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> চালানে উল্লেখিত পরিমাণের সাথে রিসিভ করা লেবেলের সংখ্যা মিলিয়ে তাৎক্ষণিক রিপোর্ট করুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card quality border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
+            <div class="flex items-start gap-2.5">
+                <span class="p-2 bg-violet-100 text-violet-800 rounded font-bold text-xs"><i class="fa-solid fa-medal"></i></span>
+                <div>
+                    <h3 class="font-bold text-xs text-slate-900">Quality Issue (সাধারণ কোয়ালিটি ত্রুটি)</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> আমাদের হ্যান্ডলিং রুলস এবং সলিউশন হাবের গাইডলাইন অনুসরণ করে স্ট্যান্ডার্ড বজায় রাখুন।</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- আগের ৩০টি সমস্যার কার্ডসমূহ (গ্রুপ-১ এবং গ্রুপ-২) -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-red-100 text-brand-red rounded font-bold text-xs"><i class="fa-solid fa-temperature-arrow-down"></i></span>
                 <div>
                     <h3 class="font-bold text-xs text-slate-900">০১. তাপমাত্রা ড্রপ বা কম পাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> থার্মোকাপল সেন্সর বা হিটিং এলিমেন্ট চেক করুন এবং থার্মো পেপার দিয়ে প্লেট পরীক্ষা করুন।</p>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> থার্মোকাপল সেন্সর বা হিটিং এলিমেন্ট চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 02 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-800 rounded font-bold text-xs"><i class="fa-solid fa-box-archive"></i></span>
                 <div>
                     <h3 class="font-bold text-xs text-slate-900">০২. লেবেল উঠে যাওয়া (Peeling)</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> Dwell Time (সময়) এবং Applied Pressure বাড়িয়ে সঠিক মাত্রা নিশ্চিত করুন।</p>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> Dwell Time ও Applied Pressure বাড়ান।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 03 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-blue-100 text-blue-800 rounded font-bold text-xs"><i class="fa-solid fa-rug"></i></span>
                 <div>
                     <h3 class="font-bold text-xs text-slate-900">০৩. অসম পৃষ্ঠে বা লুপে বন্ডিং ফেইল</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> উচুঁ-নিচু জায়গায় প্রেশার সমান রাখতে স্পেশাল সিলিকন প্যাড বা রাবার ব্যবহার করুন।</p>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> স্পেশাল সিলিকন প্যাড বা রাবার ব্যবহার করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 04 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-purple-100 text-purple-800 rounded font-bold text-xs"><i class="fa-solid fa-fire"></i></span>
                 <div>
                     <h3 class="font-bold text-xs text-slate-900">০৪. ফ্যাব্রিক পুড়ে যাওয়া (Scorch)</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> মেশিনের তাপমাত্রা অতিরিক্ত থাকলে তা কমিয়ে স্ট্যান্ডার্ড মাত্রায় নিয়ে আসুন।</p>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> মেশিনের তাপমাত্রা কমিয়ে দিন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 05 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-emerald-100 text-emerald-800 rounded font-bold text-xs"><i class="fa-solid fa-gauge"></i></span>
                 <div>
                     <h3 class="font-bold text-xs text-slate-900">০৫. প্রেশার কম বা অসমান হওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> এয়ার প্রেসার লাইন গেজ চেক করুন এবং পিস্টন সিলিন্ডারের কার্যকারিতা যাচাই করুন।</p>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> এয়ার প্রেসার লাইন গেজ চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 06 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-indigo-100 text-indigo-800 rounded font-bold text-xs"><i class="fa-solid fa-droplet"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">০৬. লেবেলে আঠা গলিত ভাব বা ব্লেন্ডিং</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> টেম্পারেচার কমান অথবা প্রেসার টাইমিং কিছুটা হ্রাস করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">০৬. লেবেলে আঠা গলিত ভাব</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> টেম্পারেচার কমান অথবা প্রেশার টাইমিং হ্রাস করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 07 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-rose-100 text-rose-800 rounded font-bold text-xs"><i class="fa-solid fa-clock"></i></span>
                 <div>
                     <h3 class="font-bold text-xs text-slate-900">০৭. টাইমার বা ডয়েল টাইম ত্রুটি</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> মেশিনের অটো টাইমার কন্ট্রোলার ও প্রক্সিমিটি সুইচ চেক করুন।</p>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> অটো টাইমার কন্ট্রোলার ও প্রক্সিমিটি সুইচ চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 08 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-900 rounded font-bold text-xs"><i class="fa-solid fa-layer-group"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">০৮. সিলিকন পেপার লেবেলে আটকে যাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> কুলিং টাইম (Cooling time) বাড়ান এবং সঠিক তাপমাত্রায় পেপার তুলুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">০৮. সিলিকন পেপার আটকে যাওয়া</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> কুলিং টাইম বাড়ান।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 09 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-cyan-100 text-cyan-800 rounded font-bold text-xs"><i class="fa-solid fa-shirt"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">০৯. ওয়াটারপ্রুফ ফ্যাব্রিকে বন্ডিং না টেকা</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ওয়াটারপ্রুফ বা প্রলিপ্ত কাপড়ের জন্য সুনির্দিষ্ট কোটের হিট ট্রান্সফার লেবেল ব্যবহার করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">০৯. ওয়াটারপ্রুফ ফ্যাব্রিকে সমস্যা</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সুনির্দিষ্ট কোটের লেবেল ব্যবহার করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 10 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-teal-100 text-teal-800 rounded font-bold text-xs"><i class="fa-solid fa-bolt"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১০. ভোল্টেজ ফ্লাকচুয়েশন বা তাপমাত্রা ওঠানামা</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> স্ট্যাবিলাইজার ব্যবহার করুন এবং মেশিনের মূল পাওয়ার লাইন চেক করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১০. ভোল্টেজ ফ্লাকচুয়েশন</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> স্ট্যাবিলাইজার ব্যবহার করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 11 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-pink-100 text-pink-800 rounded font-bold text-xs"><i class="fa-solid fa-circle-exclamation"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১১. লেবেলের রঙ বিবর্ণ বা জ্বলে যাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সেটিং তাপমাত্রা লেবেলের অনুমোদিত সীমার মধ্যে রাখুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১১. লেবেলের রঙ বিবর্ণ</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সেটিং তাপমাত্রা সীমার মধ্যে রাখুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 12 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-violet-100 text-violet-800 rounded font-bold text-xs"><i class="fa-solid fa-arrows-split-up-and-left"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১২. হিট প্লেট অসমান বা বাঁকা হওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ওপরের ও নিচের হিট প্লেটের প্যারালাল অ্যালাইনমেন্ট রি-অ্যাডজাস্ট করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১২. হিট প্লেট অসমান</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> প্যারালাল অ্যালাইনমেন্ট রি-অ্যাডজাস্ট করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 13 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-orange-100 text-orange-800 rounded font-bold text-xs"><i class="fa-solid fa-wind"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১৩. এয়ার লিক করা বা প্রেশার ড্রপ</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> নিউম্যাটিক পাইপ, ভালভ এবং এয়ার সিল সংযোগস্থল লিক টেস্ট করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১৩. এয়ার লিক বা প্রেশার ড্রপ</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> নিউম্যাটিক পাইপ ও ভালভ চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 14 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-lime-100 text-lime-900 rounded font-bold text-xs"><i class="fa-solid fa-hand"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১৪. লেবেলে হাত বা আঙ্গুলের দাগ</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> অপারেটরকে গ্লাভস ব্যবহার করতে বলুন এবং লেবেলের গ্লু অংশ পরিষ্কার রাখুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১৪. লেবেলে হাতের দাগ</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> গ্লাভস ব্যবহার করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 15 -->
         <div class="problem-card group-1 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-stone-200 text-stone-800 rounded font-bold text-xs"><i class="fa-solid fa-broom"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১৫. হিট প্লেটে আঠা জমে কালো হওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> টেস্টিং ক্লিনার বা নরম কাপড় দিয়ে গরম থাকা অবস্থায় প্লেট পরিষ্কার করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১৫. প্লেটে আঠা জমে যাওয়া</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ক্লিনার দিয়ে প্লেট পরিষ্কার করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 16 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-red-100 text-red-900 rounded font-bold text-xs"><i class="fa-solid fa-stopwatch"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১৬. অটো সাইকেল শুরু না হওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> মেশিনের সেফটি সেন্সর, লিমিট সুইচ এবং ফুড পেডেল সুইচ চেক করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১৬. অটো সাইকেল সমস্যা</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সেফটি সেন্সর ও সুইচ চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 17 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-sky-100 text-sky-800 rounded font-bold text-xs"><i class="fa-solid fa-temperature-full"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১৭. থার্মোস্টেট রিলের সমস্যা</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> এসএসআর (SSR) বা টেম্পারেচার কন্ট্রোলার প্যানেল রিলে পরিবর্তন করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১৭. থার্মোস্টেট রিলের ত্রুটি</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> এসএসআর বা রিলে পরিবর্তন করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 18 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-emerald-100 text-emerald-900 rounded font-bold text-xs"><i class="fa-solid fa-snowflake"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১৮. অতিরিক্ত ঠান্ডায় আঠা শক্ত হয়ে যাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> লেবেল ব্যবহারের পূর্বে রুম টেম্পারেচারে (৩০°C এর নিচে) স্বাভাবিক করে নিন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১৮. ঠান্ডায় আঠা শক্ত হওয়া</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ব্যবহারের আগে স্বাভাবিক করে নিন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 19 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-800 rounded font-bold text-xs"><i class="fa-solid fa-water"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">১৯. কাপড়ে ময়েশ্চার বা স্যাঁতসেঁতে ভাব</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> বন্ডিংয়ের আগে প্রি-প্রেস (Pre-press) করে ফ্যাব্রিকের আর্দ্রতা শুকিয়ে নিন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">১৯. কাপড়ে স্যাঁতসেঁতে ভাব</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> প্রি-প্রেস করে আর্দ্রতা শুকিয়ে নিন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 20 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-purple-100 text-purple-900 rounded font-bold text-xs"><i class="fa-solid fa-triangle-exclamation"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২০. পলিয়েস্টার কাপড়ে শিংরিং (Shrinkage)</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> তাপমাত্রা কিছুটা কমিয়ে প্রেসার টাইম অপ্টিমাইজ করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২০. পলিয়েস্টার শিংরিং</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> তাপমাত্রা কমিয়ে প্রেসার টাইম ঠিক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 21 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-blue-100 text-blue-900 rounded font-bold text-xs"><i class="fa-solid fa-rotate"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২১. রাবার প্যাড ক্ষয়ে যাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> পুরনো সিলিকন রাবার প্যাড পরিবর্তন করে নতুন এবং সঠিক সাইজের প্যাড লাগান।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২১. রাবার প্যাড ক্ষয়ে যাওয়া</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> নতুন রাবার প্যাড লাগান।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 22 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-rose-100 text-rose-900 rounded font-bold text-xs"><i class="fa-solid fa-network-wired"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২২. ওয়্যারিং বা হিটার কয়েল শর্ট সার্কিট</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ইলেকট্রিশিয়ান দিয়ে মেশিনের ভেতরের ক্যাবল ও হিটার টার্মিনাল চেক করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২২. ওয়্যারিং শর্ট সার্কিট</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ক্যাবল ও হিটার টার্মিনাল চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 23 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-indigo-100 text-indigo-900 rounded font-bold text-xs"><i class="fa-solid fa-shield-halved"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২৩. ওয়াশ টেস্টে (Wash Test) লেবেল উঠে যাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সঠিক এপ্লাইড প্রেসার এবং সঠিক বন্ডিং টেম্পারেচার ফর্মুলা রি-চেক করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২৩. ওয়াশ টেস্ট ফেইল</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সঠিক এপ্লাইড প্রেসার রি-চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 24 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-teal-100 text-teal-900 rounded font-bold text-xs"><i class="fa-solid fa-sliders"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২৪. ডিজিটাল ডিসপ্লে প্যানেল কাজ না করা</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> মাদারবোর্ডের ফিউজ ও ডিসপ্লে কানেকশন চেক করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২৪. ডিসপ্লে প্যানেল সমস্যা</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ফিউজ ও কানেকশন চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 25 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-amber-100 text-amber-900 rounded font-bold text-xs"><i class="fa-solid fa-arrows-down-to-line"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২৫. প্লেট নামতে বা উঠতে দেরি হওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সোলেভয়েড ভালভ (Solenoid Valve) এবং এয়ার ফ্লো কন্ট্রোলার রেগুলেটর পরিষ্কার করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২৫. প্লেট নামতে দেরি</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সোলেনয়েড ভালভ পরিষ্কার করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 26 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-cyan-100 text-cyan-900 rounded font-bold text-xs"><i class="fa-solid fa-sun"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২৬. লেবেল কুঁচকে যাওয়া বা রিংকেল পড়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> প্লেট নামার সময় সমানভাবে প্রেশার পড়ছে কিনা এবং কাপড় সোজা আছে কিনা দেখুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২৬. লেবেল কুঁচকে যাওয়া</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> কাপড়ের পজিশন ও প্রেশার সমান আছে কিনা দেখুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 27 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-red-100 text-red-800 rounded font-bold text-xs"><i class="fa-solid fa-triangle-exclamation"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২৭. এমার্জেন্সি স্টপ সুইচ আটকে যাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> এমার্জেন্সি সুইচ রিলিজ করুন এবং ইন্টারনাল সুইচ কন্টাক্ট চেক করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২৭. এমার্জেন্সি সুইচ সমস্যা</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> সুইচ রিলিজ ও কন্টাক্ট চেক করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 28 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-green-100 text-green-800 rounded font-bold text-xs"><i class="fa-solid fa-list-check"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২৮. মাল্টি-লেয়ার ফ্যাব্রিক বন্ডিং ফেইলিওর</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ডাবল হিট সাইকেল অথবা সেকেন্ডারি ডয়েল টাইম পদ্ধতি ব্যবহার করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২৮. মাল্টি-লেয়ার বন্ডিং</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> ডাবল হিট সাইকেল ব্যবহার করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 29 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-orange-100 text-orange-900 rounded font-bold text-xs"><i class="fa-solid fa-gears"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">২৯. নিউম্যাটিক সিলিন্ডারে গ্রিজ শুকিয়ে যাওয়া</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> লুব্রিকেটর ফিল্টারে ফুড গ্রেড অয়েল বা নিউম্যাটিক লুব্রিকেন্ট রিফিল করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">২৯. সিলিন্ডারে গ্রিজ শুকিয়ে যাওয়া</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> লুব্রিকেন্ট রিফিল করুন।</p>
                 </div>
             </div>
         </div>
 
-        <!-- Problem 30 -->
         <div class="problem-card group-2 border border-slate-200 rounded-lg p-3 hover:border-brand-red transition bg-slate-50/50">
             <div class="flex items-start gap-2.5">
                 <span class="p-2 bg-slate-200 text-slate-900 rounded font-bold text-xs"><i class="fa-solid fa-clipboard-check"></i></span>
                 <div>
-                    <h3 class="font-bold text-xs text-slate-900">৩০. প্রোডাকশন কোয়ালিটি স্ট্যান্ডার্ড অমিল</h3>
-                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> স্ট্যান্ডার্ড হ্যান্ডলিং রুলস ও আমাদের ক্যালকুলেটর অনুযায়ী সঠিক প্রেশার সেট করুন।</p>
+                    <h3 class="font-bold text-xs text-slate-900">৩০. কোয়ালিটি স্ট্যান্ডার্ড অমিল</h3>
+                    <p class="text-[11px] text-slate-600 mt-1"><strong>সমাধান:</strong> স্ট্যান্ডার্ড গাইডলাইন অনুযায়ী প্রেশার দিন।</p>
                 </div>
             </div>
         </div>
