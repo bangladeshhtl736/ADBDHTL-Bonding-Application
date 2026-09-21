@@ -138,3 +138,20 @@ function applyAdminFilter() {
     if (selectedRBO && document.getElementById('reportMasterCustomer')) document.getElementById('reportMasterCustomer').value = selectedRBO;
     if (selectedCust && document.getElementById('reportVendor')) document.getElementById('reportVendor').value = selectedCust;
 }
+// Solution Hub প্রবলেম ফিল্টার করার ফাংশন
+function filterProblemsList() {
+    const selectedFilter = document.getElementById('problemFilter').value;
+    const group1Cards = document.querySelectorAll('.problem-card.group-1');
+    const group2Cards = document.querySelectorAll('.problem-card.group-2');
+
+    if (selectedFilter === 'all') {
+        group1Cards.forEach(card => card.classList.remove('hidden'));
+        group2Cards.forEach(card => card.classList.remove('hidden'));
+    } else if (selectedFilter === 'group1') {
+        group1Cards.forEach(card => card.classList.remove('hidden'));
+        group2Cards.forEach(card => card.classList.add('hidden'));
+    } else if (selectedFilter === 'group2') {
+        group1Cards.forEach(card => card.classList.add('hidden'));
+        group2Cards.forEach(card => card.classList.remove('hidden'));
+    }
+}
