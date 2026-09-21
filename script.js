@@ -1,13 +1,15 @@
-// ব্রাউজারের LocalStorage থেকে ডাটা লোড করা, না থাকলে ডিফল্ট ডাটা ব্যবহার হবে
-let adminItems = JSON.parse(localStorage.getItem('htl_admin_items')) || ["ON-291351-HTL-HALO-GLB", "GAP-88219-HTL-CORE", "TG-77312-HTL-LABEL"];
-let adminRBOs = JSON.parse(localStorage.getItem('htl_admin_rbos')) || ["OLD NAVY", "GAP", "TARGET", "WALMART"];
+// ১. ডাটাবেজ ম্যাপিং কাঠামো (LocalStorage থেকে লোড হবে)
 let adminCustomers = JSON.parse(localStorage.getItem('htl_admin_customers')) || ["JAY MILLS (BANGLADESH) PRIVATE LIMITED", "AHMED FASHION LTD", "STANDARD GROUP"];
+// ম্যাপিং স্ট্রাকচার: { "JAY MILLS...": { items: ["ON-291351..."], rbos: ["OLD NAVY"] } }
+let customerMappings = JSON.parse(localStorage.getItem('htl_customer_mappings')) || {
+    "JAY MILLS (BANGLADESH) PRIVATE LIMITED": { items: ["ON-291351-HTL-HALO-GLB"], rbos: ["OLD NAVY"] },
+    "AHMED FASHION LTD": { items: ["GAP-88219-HTL-CORE"], rbos: ["GAP"] },
+    "STANDARD GROUP": { items: ["TG-77312-HTL-LABEL"], rbos: ["TARGET"] }
+};
 
-// ডাটা সেভ করার ফাংশন
 function saveDatabase() {
-    localStorage.setItem('htl_admin_items', JSON.stringify(adminItems));
-    localStorage.setItem('htl_admin_rbos', JSON.stringify(adminRBOs));
     localStorage.setItem('htl_admin_customers', JSON.stringify(adminCustomers));
+    localStorage.setItem('htl_customer_mappings', JSON.stringify(customerMappings));
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -33,6 +35,8 @@ async function loadComponent(elementId, fileName) {
         if (response.ok) {
             const html = await response.text();
             document.getElementById(elementId).innerHTML = html;
+            renderAdminLists();
+            populateFilters();
         }
     } catch (error) {
         console.error(`Failed to load ${fileName}:`, error);
@@ -54,9 +58,10 @@ function switchTab(tabId) {
         activeBtn.classList.add('bg-brand-red', 'text-white');
         activeBtn.classList.remove('text-slate-300');
     }
+    populateFilters();
 }
 
-// --- Admin Login & Password System ---
+// --- Admin Login ---
 function handleAdminLogin() {
     const user = document.getElementById('adminUser')?.value.trim();
     const pass = document.getElementById('adminPass')?.value.trim();
@@ -79,7 +84,7 @@ function handleAdminLogout() {
     document.getElementById('adminLoginBox')?.classList.remove('hidden');
 }
 
-// Calculations & Others
+// Calculations
 function runStandaloneCalc() {
     const lineP = parseFloat(document.getElementById('calcLinePress')?.value) || 0;
     const dia = parseFloat(document.getElementById('calcPistonDia')?.value) || 0;
@@ -91,9 +96,7 @@ function runStandaloneCalc() {
     const rubberArea = rL * rW;
 
     let appliedP = 0;
-    if (rubberArea > 0) {
-        appliedP = (lineP * pistonArea) / rubberArea;
-    }
+    if (rubberArea > 0) appliedP = (lineP * pistonArea) / rubberArea;
 
     if(document.getElementById('calcAppliedResult')) document.getElementById('calcAppliedResult').innerText = appliedP.toFixed(2);
     if(document.getElementById('calcPistonAreaText')) document.getElementById('calcPistonAreaText').innerText = pistonArea.toFixed(2) + ' cm²';
@@ -113,9 +116,7 @@ function syncCalculator() {
     const rubberArea = rL * rW;
 
     let appliedP = 0;
-    if (rubberArea > 0) {
-        appliedP = (lineP * pistonArea) / rubberArea;
-    }
+    if (rubberArea > 0) appliedP = (lineP * pistonArea) / rubberArea;
 
     if(document.getElementById('rptAppliedPressure')) document.getElementById('rptAppliedPressure').innerText = appliedP.toFixed(2);
 }
@@ -130,9 +131,7 @@ function syncToReport() {
     switchTab('dashboard');
 }
 
-function triggerImageUpload(inputId) {
-    document.getElementById(inputId)?.click();
-}
+function triggerImageUpload(inputId) { document.getElementById(inputId)?.click(); }
 
 function previewImage(input, imgId, txtId) {
     const file = input.files[0];
@@ -140,39 +139,25 @@ function previewImage(input, imgId, txtId) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = document.getElementById(imgId);
-            if(img) {
-                img.src = e.target.result;
-                img.classList.remove('hidden');
-            }
+            if(img) { img.src = e.target.result; img.classList.remove('hidden'); }
             document.getElementById(txtId)?.classList.add('hidden');
         }
         reader.readAsDataURL(file);
     }
 }
 
-// Admin Management & Records (LocalStorage Save সহ)
+// --- Admin Management & Mapping ---
 function renderAdminLists() {
+    const customerList = document.getElementById('adminCustomerList');
     const itemList = document.getElementById('adminItemList');
     const rboList = document.getElementById('adminRBOList');
-    const customerList = document.getElementById('adminCustomerList');
+    const mapItemCustSel = document.getElementById('mapItemCustomerSelect');
+    const mapRBOCustSel = document.getElementById('mapRBOCustomerSelect');
 
-    if(itemList) {
-        itemList.innerHTML = adminItems.map((item, idx) => `
-            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
-                <span>${item}</span>
-                <button onclick="removeAdminItem(${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
-            </li>
-        `).join('');
-    }
-
-    if(rboList) {
-        rboList.innerHTML = adminRBOs.map((rbo, idx) => `
-            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
-                <span>${rbo}</span>
-                <button onclick="removeAdminRBO(${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
-            </li>
-        `).join('');
-    }
+    // কাস্টমার ড্রপডাউন অপশন পপুলেট
+    let custOptions = adminCustomers.map(c => `<option value="${c}">${c}</option>`).join('');
+    if(mapItemCustSel) mapItemCustSel.innerHTML = custOptions;
+    if(mapRBOCustSel) mapRBOCustSel.innerHTML = custOptions;
 
     if(customerList) {
         customerList.innerHTML = adminCustomers.map((cust, idx) => `
@@ -183,67 +168,132 @@ function renderAdminLists() {
         `).join('');
     }
 
-    if(document.getElementById('itemCountTag')) document.getElementById('itemCountTag').innerText = `${adminItems.length} Items`;
-    if(document.getElementById('rboCountTag')) document.getElementById('rboCountTag').innerText = `${adminRBOs.length} RBOs`;
+    // নির্দিষ্ট সিলেক্ট করা কাস্টমারের আইটেম লিস্ট দেখানো
+    const activeItemCust = mapItemCustSel?.value || adminCustomers[0];
+    const currentItems = (customerMappings[activeItemCust]?.items) || [];
+    if(itemList) {
+        itemList.innerHTML = currentItems.map((item, idx) => `
+            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
+                <span>${item}</span>
+                <button onclick="removeCustomerItem('${activeItemCust}', ${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+            </li>
+        `).join('');
+    }
+
+    // নির্দিষ্ট সিলেক্ট করা কাস্টমারের RBO লিস্ট দেখানো
+    const activeRBOCust = mapRBOCustSel?.value || adminCustomers[0];
+    const currentRBOs = (customerMappings[activeRBOCust]?.rbos) || [];
+    if(rboList) {
+        rboList.innerHTML = currentRBOs.map((rbo, idx) => `
+            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
+                <span>${rbo}</span>
+                <button onclick="removeCustomerRBO('${activeRBOCust}', ${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+            </li>
+        `).join('');
+    }
+
     if(document.getElementById('customerCountTag')) document.getElementById('customerCountTag').innerText = `${adminCustomers.length} Customers`;
+    if(document.getElementById('itemCountTag')) document.getElementById('itemCountTag').innerText = `${currentItems.length} Items`;
+    if(document.getElementById('rboCountTag')) document.getElementById('rboCountTag').innerText = `${currentRBOs.length} RBOs`;
     
     populateFilters();
-    populateSupportCustomerDropdown();
 }
 
-function addAdminItem() {
-    const val = document.getElementById('newItemInput')?.value.trim().toUpperCase();
-    if (val && !adminItems.includes(val)) {
-        adminItems.push(val);
-        document.getElementById('newItemInput').value = '';
-        saveDatabase();
-        renderAdminLists();
-    }
-}
-function removeAdminItem(idx) { 
-    adminItems.splice(idx, 1); 
-    saveDatabase();
-    renderAdminLists(); 
-}
-
-function addAdminRBO() {
-    const val = document.getElementById('newRBOInput')?.value.trim().toUpperCase();
-    if (val && !adminRBOs.includes(val)) {
-        adminRBOs.push(val);
-        document.getElementById('newRBOInput').value = '';
-        saveDatabase();
-        renderAdminLists();
-    }
-}
-function removeAdminRBO(idx) { 
-    adminRBOs.splice(idx, 1); 
-    saveDatabase();
-    renderAdminLists(); 
-}
-
+// কাস্টমার যোগ করা
 function addAdminCustomer() {
     const val = document.getElementById('newCustomerInput')?.value.trim().toUpperCase();
     if (val && !adminCustomers.includes(val)) {
         adminCustomers.push(val);
+        customerMappings[val] = { items: [], rbos: [] };
         document.getElementById('newCustomerInput').value = '';
         saveDatabase();
         renderAdminLists();
     }
 }
-function removeAdminCustomer(idx) { 
-    adminCustomers.splice(idx, 1); 
+function removeAdminCustomer(idx) {
+    const cust = adminCustomers[idx];
+    adminCustomers.splice(idx, 1);
+    delete customerMappings[cust];
     saveDatabase();
-    renderAdminLists(); 
+    renderAdminLists();
 }
 
+// নির্দিষ্ট কাস্টমারের আন্ডারে আইটেম যোগ করা
+function addAdminItem() {
+    const cust = document.getElementById('mapItemCustomerSelect')?.value;
+    const val = document.getElementById('newItemInput')?.value.trim().toUpperCase();
+    if (cust && val) {
+        if(!customerMappings[cust]) customerMappings[cust] = { items: [], rbos: [] };
+        if(!customerMappings[cust].items.includes(val)) {
+            customerMappings[cust].items.push(val);
+            document.getElementById('newItemInput').value = '';
+            saveDatabase();
+            renderAdminLists();
+        }
+    }
+}
+function removeCustomerItem(cust, idx) {
+    if(customerMappings[cust]) {
+        customerMappings[cust].items.splice(idx, 1);
+        saveDatabase();
+        renderAdminLists();
+    }
+}
+
+// নির্দিষ্ট কাস্টমারের আন্ডারে RBO যোগ করা
+function addAdminRBO() {
+    const cust = document.getElementById('mapRBOCustomerSelect')?.value;
+    const val = document.getElementById('newRBOInput')?.value.trim().toUpperCase();
+    if (cust && val) {
+        if(!customerMappings[cust]) customerMappings[cust] = { items: [], rbos: [] };
+        if(!customerMappings[cust].rbos.includes(val)) {
+            customerMappings[cust].rbos.push(val);
+            document.getElementById('newRBOInput').value = '';
+            saveDatabase();
+            renderAdminLists();
+        }
+    }
+}
+function removeCustomerRBO(cust, idx) {
+    if(customerMappings[cust]) {
+        customerMappings[cust].rbos.splice(idx, 1);
+        saveDatabase();
+        renderAdminLists();
+    }
+}
+
+// --- Report Gen Dynamic Filters ---
 function populateFilters() {
+    const fCust = document.getElementById('filterCustomer');
+    if(fCust) {
+        fCust.innerHTML = adminCustomers.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+    onReportCustomerChange();
+}
+
+// রিপোর্ট পেজে কাস্টমার চেঞ্জ করলে তার আন্ডারের আইটেম ও RBO গুলো অটো লোড হবে
+function onReportCustomerChange() {
+    const selectedCust = document.getElementById('filterCustomer')?.value;
     const fItem = document.getElementById('filterItemRef');
     const fRBO = document.getElementById('filterRBO');
-    const fCust = document.getElementById('filterCustomer');
 
-    if(fItem) fItem.innerHTML = adminItems.map(i => `<option value="${i}">${i}</option>`).join('');
-    if(fRBO) fRBO.innerHTML = adminRBOs.map(r => `<option value="${r}">${r}</option>`).join('');
-    if(fCust) fCust.innerHTML = adminCustomers.map(c => `<option value="${c}">${c}</option>`).join('');
+    if (!selectedCust) return;
+
+    if(document.getElementById('reportVendor')) document.getElementById('reportVendor').value = selectedCust;
+
+    const data = customerMappings[selectedCust] || { items: [], rbos: [] };
+
+    if(fItem) {
+        fItem.innerHTML = data.items.length > 0 
+            ? data.items.map(i => `<option value="${i}">${i}</option>`).join('')
+            : `<option value="">কোনো Item Ref নেই</option>`;
+    }
+
+    if(fRBO) {
+        fRBO.innerHTML = data.rbos.length > 0 
+            ? data.rbos.map(r => `<option value="${r}">${r}</option>`).join('')
+            : `<option value="">কোনো RBO নেই</option>`;
+    }
 
     applyAdminFilter();
 }
@@ -251,14 +301,12 @@ function populateFilters() {
 function applyAdminFilter() {
     const selectedItem = document.getElementById('filterItemRef')?.value;
     const selectedRBO = document.getElementById('filterRBO')?.value;
-    const selectedCust = document.getElementById('filterCustomer')?.value;
 
     if (selectedItem && document.getElementById('reportHtlRef')) document.getElementById('reportHtlRef').value = selectedItem;
     if (selectedRBO && document.getElementById('reportMasterCustomer')) document.getElementById('reportMasterCustomer').value = selectedRBO;
-    if (selectedCust && document.getElementById('reportVendor')) document.getElementById('reportVendor').value = selectedCust;
 }
 
-// Support & Ticket System Data Logic
+// --- Support System ---
 let supportTickets = [
     { id: 1, customer: "JAY MILLS (BANGLADESH) PRIVATE LIMITED", name: "Md. Rahim", whatsapp: "+8801711000000", factory: "JAY MILLS", subject: "Temperature Mismatch", details: "সেটিং ২৩০ দিলেও ১৬৬ পাওয়া যাচ্ছে।", reply: "থার্মোকাপল সেন্সর চেক করুন।" }
 ];
@@ -266,7 +314,6 @@ let supportTickets = [
 function populateSupportCustomerDropdown() {
     const custSelect = document.getElementById('suppCustomerSelect');
     if (!custSelect) return;
-
     custSelect.innerHTML = `<option value="">-- কাস্টমার সিলেক্ট করুন --</option>` + 
         adminCustomers.map(c => `<option value="${c}">${c}</option>`).join('');
 }
@@ -287,22 +334,9 @@ function submitSupportTicket(e) {
     const subject = document.getElementById('suppSubject')?.value;
     const details = document.getElementById('suppDetails')?.value.trim();
 
-    if (!customer) {
-        alert('দয়া করে তালিকা থেকে কাস্টমার সিলেক্ট করুন!');
-        return;
-    }
+    if (!customer) { alert('দয়া করে তালিকা থেকে কাস্টমার সিলেক্ট করুন!'); return; }
 
-    const newTicket = {
-        id: Date.now(),
-        customer: customer,
-        name: name,
-        whatsapp: whatsapp,
-        factory: factory,
-        subject: subject,
-        details: details,
-        reply: null
-    };
-
+    const newTicket = { id: Date.now(), customer, name, whatsapp, factory, subject, details, reply: null };
     supportTickets.unshift(newTicket);
     renderTickets();
 
@@ -318,7 +352,6 @@ function renderTickets() {
     if(!ticketBox) return;
 
     if(badge) badge.innerText = `${supportTickets.length} Tickets`;
-
     if(supportTickets.length === 0) {
         ticketBox.innerHTML = `<div class="text-slate-400 text-center py-10">কোনো নতুন টিকিট জমা হয়নি।</div>`;
         return;
@@ -329,13 +362,13 @@ function renderTickets() {
             <div class="flex justify-between items-center font-bold text-slate-800">
                 <span><i class="fa-solid fa-user-circle text-brand-red mr-1"></i> ${t.customer}</span>
                 <span class="text-[10px] px-1.5 py-0.5 rounded ${t.reply ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
-                    ${t.reply ? 'Solved / Replied' : 'Pending'}
+                    ${t.reply ? 'Solved' : 'Pending'}
                 </span>
             </div>
             <p class="text-[11px] text-slate-600"><strong>যোগাযোগ:</strong> ${t.name} | <a href="https://wa.me/${t.whatsapp.replace(/[^0-9]/g, '')}" target="_blank" class="text-emerald-600 font-bold hover:underline"><i class="fa-brands fa-whatsapp"></i> ${t.whatsapp}</a></p>
             <p class="font-semibold text-slate-700 text-[11px]"><span class="text-slate-500">বিষয়:</span> ${t.subject}</p>
             <p class="text-slate-600 text-[11px] truncate"><span class="text-slate-500">বিবরণ:</span> ${t.details}</p>
-            ${t.reply ? `<p class="text-emerald-700 bg-emerald-50 p-1.5 rounded mt-1 text-[11px]"><strong>উত্তর:</strong> ${t.reply}</p>` : `<p class="text-[10px] text-brand-red italic">উত্তর দেওয়ার জন্য এখানে ক্লিক করুন...</p>`}
+            ${t.reply ? `<p class="text-emerald-700 bg-emerald-50 p-1.5 rounded mt-1 text-[11px]"><strong>উত্তর:</strong> ${t.reply}</p>` : `<p class="text-[10px] text-brand-red italic">উত্তর দেওয়ার জন্য ক্লিক করুন...</p>`}
         </div>
     `).join('');
 }
@@ -343,7 +376,7 @@ function renderTickets() {
 let activeTicketId = null;
 function selectTicketForReply(id) {
     activeTicketId = id;
-    const ticket = supportTickets.find(t => t.id === id);
+    const ticket = supportTickets.logIC ? null : supportTickets.find(t => t.id === id);
     if(ticket) {
         if(document.getElementById('activeTicketTitle')) document.getElementById('activeTicketTitle').innerText = `${ticket.customer} (${ticket.subject})`;
         document.getElementById('replySection')?.classList.remove('hidden');
@@ -353,11 +386,7 @@ function selectTicketForReply(id) {
 
 function sendTicketReply() {
     const replyText = document.getElementById('replyInput')?.value.trim();
-    if(!replyText) {
-        alert('দয়া করে উত্তর লিখুন!');
-        return;
-    }
-
+    if(!replyText) { alert('দয়া করে উত্তর লিখুন!'); return; }
     const ticket = supportTickets.find(t => t.id === activeTicketId);
     if(ticket) {
         ticket.reply = replyText;
