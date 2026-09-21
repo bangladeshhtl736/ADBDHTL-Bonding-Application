@@ -24,7 +24,62 @@ window.addEventListener('DOMContentLoaded', async () => {
     const dateInput = document.getElementById('reportDate');
     if(dateInput) dateInput.value = today;
     
-    renderAdminLists();
+    function renderAdminLists() {
+    const customerList = document.getElementById('adminCustomerList');
+    const itemList = document.getElementById('adminItemList');
+    const rboList = document.getElementById('adminRBOList');
+    const mapItemCustSel = document.getElementById('mapItemCustomerSelect');
+    const mapRBOCustSel = document.getElementById('mapRBOCustomerSelect');
+
+    // কাস্টমার ড্রপডাউনে যেন নামগুলো অটো চলে আসে তার ব্যবস্থা
+    let custOptions = `<option value="">-- কাস্টমার সিলেক্ট করুন --</option>` + 
+        adminCustomers.map(c => `<option value="${c}">${c}</option>`).join('');
+    
+    if(mapItemCustSel) mapItemCustSel.innerHTML = custOptions;
+    if(mapRBOCustSel) mapRBOCustSel.innerHTML = custOptions;
+
+    if(adminCustomers.length > 0) {
+        if(mapItemCustSel && !mapItemCustSel.value) mapItemCustSel.value = adminCustomers[0];
+        if(mapRBOCustSel && !mapRBOCustSel.value) mapRBOCustSel.value = adminCustomers[0];
+    }
+
+    if(customerList) {
+        customerList.innerHTML = adminCustomers.map((cust, idx) => `
+            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
+                <span>${cust}</span>
+                <button onclick="removeAdminCustomer(${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+            </li>
+        `).join('');
+    }
+
+    const activeItemCust = mapItemCustSel?.value || adminCustomers[0];
+    const currentItems = (customerMappings[activeItemCust]?.items) || [];
+    if(itemList) {
+        itemList.innerHTML = currentItems.map((item, idx) => `
+            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
+                <span>${item}</span>
+                <button onclick="removeCustomerItem('${activeItemCust}', ${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+            </li>
+        `).join('');
+    }
+
+    const activeRBOCust = mapRBOCustSel?.value || adminCustomers[0];
+    const currentRBOs = (customerMappings[activeRBOCust]?.rbos) || [];
+    if(rboList) {
+        rboList.innerHTML = currentRBOs.map((rbo, idx) => `
+            <li class="p-2.5 flex justify-between items-center hover:bg-slate-50">
+                <span>${rbo}</span>
+                <button onclick="removeCustomerRBO('${activeRBOCust}', ${idx})" class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+            </li>
+        `).join('');
+    }
+
+    if(document.getElementById('customerCountTag')) document.getElementById('customerCountTag').innerText = `${adminCustomers.length} Customers`;
+    if(document.getElementById('itemCountTag')) document.getElementById('itemCountTag').innerText = `${currentItems.length} Items`;
+    if(document.getElementById('rboCountTag')) document.getElementById('rboCountTag').innerText = `${currentRBOs.length} RBOs`;
+    
+    populateFilters();
+}
     populateFilters();
     runStandaloneCalc();
 });
