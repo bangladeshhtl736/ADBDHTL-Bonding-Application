@@ -1,9 +1,10 @@
 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+    <!-- Main Admin Header -->
     <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
         <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-user-gear text-2xl"></i></div>
         <div>
             <h2 class="text-xl font-bold text-slate-900">Admin Panel & Master Database</h2>
-            <p class="text-xs text-slate-500">Item References, RBOs এবং Customer Name ডাটাবেজ ম্যানেজমেন্ট</p>
+            <p class="text-xs text-slate-500">কাস্টমার, RBO এবং Item Reference ম্যানেজমেন্ট সিস্টেম</p>
         </div>
     </div>
 
@@ -24,75 +25,98 @@
         <p id="loginError" class="text-red-600 text-xs text-center hidden font-bold">ইউজারনেম অথবা পাসওয়ার্ড ভুল হয়েছে!</p>
     </div>
 
-    <!-- Admin Panel Dashboard -->
+    <!-- Admin Panel Dashboard (লগইন করার পর দেখাবে) -->
     <div id="adminDashboardBox" class="hidden space-y-6">
+        <!-- Top Control Bar -->
         <div class="flex justify-between items-center bg-slate-100 p-3 rounded-lg">
             <span class="text-xs font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Admin Logged In Successfully</span>
             <button onclick="handleAdminLogout()" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded">লগআউট</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <!-- ১. Item Reference Management (By Customer) -->
-            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between items-center">
-                    <span>Item Reference</span>
-                    <span id="itemCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Items</span>
+        <!-- 3 Sub-Navigators (Tabs) -->
+        <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+            <button onclick="switchAdminSubTab('customer')" id="adminSubBtn-customer" class="admin-sub-btn px-4 py-2 bg-slate-900 text-white font-bold rounded-lg text-xs transition shadow">
+                1. Customer Management
+            </button>
+            <button onclick="switchAdminSubTab('rbo')" id="adminSubBtn-rbo" class="admin-sub-btn px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition hover:bg-slate-300">
+                2. RBO Management
+            </button>
+            <button onclick="switchAdminSubTab('item')" id="adminSubBtn-item" class="admin-sub-btn px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition hover:bg-slate-300">
+                3. Item Reference Management
+            </button>
+        </div>
+
+        <!-- Sub-Tab 1: Customer Management -->
+        <div id="adminSubTab-customer" class="admin-sub-content space-y-4">
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 max-w-xl">
+                <h3 class="font-bold text-sm text-slate-900 mb-3 uppercase tracking-wider flex justify-between items-center">
+                    <span><i class="fa-solid fa-building mr-1 text-brand-red"></i> নতুন কাস্টমার যোগ করুন (Customer Name)</span>
+                    <span id="customerCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Customers</span>
                 </h3>
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">কাস্টমার সিলেক্ট করুন:</label>
-                    <select id="itemCustomerSelect" class="w-full p-2 border border-slate-300 rounded text-xs bg-white font-semibold">
-                        <!-- ডায়নামিক কাস্টমার লিস্ট -->
-                    </select>
-                </div>
                 <div class="flex gap-2">
-                    <input type="text" id="newItemInput" placeholder="যেমন: ON-291351..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-mono font-semibold bg-white">
-                    <button onclick="addAdminItem()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
-                </div>
-                <div class="border border-slate-200 bg-white rounded-lg max-h-50 overflow-y-auto custom-scrollbar">
-                    <ul id="adminItemList" class="divide-y divide-slate-200 text-xs font-mono"></ul>
+                    <input type="text" id="newCustomerInput" placeholder="যেমন: JAY MILLS..." class="flex-grow p-2.5 border border-slate-300 rounded-lg text-xs uppercase font-semibold bg-white">
+                    <button onclick="addAdminCustomer()" class="px-5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition">Save Customer</button>
                 </div>
             </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 max-w-xl">
+                <h4 class="font-bold text-xs text-slate-700 mb-2">সেভ করা কাস্টমারদের তালিকা:</h4>
+                <ul id="adminCustomerList" class="divide-y divide-slate-200 text-xs font-semibold max-h-48 overflow-y-auto custom-scrollbar"></ul>
+            </div>
+        </div>
 
-            <!-- ২. RBO Management (By Customer) -->
-            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between items-center">
-                    <span>RBO Management</span>
+        <!-- Sub-Tab 2: RBO Management -->
+        <div id="adminSubTab-rbo" class="admin-sub-content hidden space-y-4">
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 max-w-xl space-y-3">
+                <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex justify-between items-center">
+                    <span><i class="fa-solid fa-registered mr-1 text-brand-red"></i> RBO Management</span>
                     <span id="rboCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 RBOs</span>
                 </h3>
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">কাস্টমার সিলেক্ট করুন:</label>
-                    <select id="rboCustomerSelect" class="w-full p-2 border border-slate-300 rounded text-xs bg-white font-semibold">
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">কাস্টমার সিলেক্ট করুন (Auto Loaded):</label>
+                    <select id="rboCustomerSelect" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white font-semibold">
                         <!-- ডায়নামিক কাস্টমার লিস্ট -->
                     </select>
                 </div>
-                <div class="flex gap-2">
-                    <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold bg-white">
-                    <button onclick="addAdminRBO()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
-                </div>
-                <div class="border border-slate-200 bg-white rounded-lg max-h-50 overflow-y-auto custom-scrollbar">
-                    <ul id="adminRBOList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
-                </div>
-            </div>
-
-            <!-- ৩. Customer Name Management -->
-            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <h3 class="font-bold text-sm text-slate-900 border-b pb-2 flex justify-between items-center">
-                    <span>Customer Name</span>
-                    <span id="customerCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Customers</span>
-                </h3>
-                <div class="pt-5">
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">নতুন কাস্টমার যোগ করুন:</label>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">নতুন RBO নাম লিখুন:</label>
                     <div class="flex gap-2">
-                        <input type="text" id="newCustomerInput" placeholder="যেমন: JAY MILLS..." class="flex-grow p-2 border border-slate-300 rounded text-xs uppercase font-semibold bg-white">
-                        <button onclick="addAdminCustomer()" class="px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded">Add</button>
+                        <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY..." class="flex-grow p-2.5 border border-slate-300 rounded-lg text-xs uppercase font-semibold bg-white">
+                        <button onclick="addAdminRBO()" class="px-5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition">Save RBO</button>
                     </div>
                 </div>
-                <div class="border border-slate-200 bg-white rounded-lg max-h-50 overflow-y-auto custom-scrollbar mt-2">
-                    <ul id="adminCustomerList" class="divide-y divide-slate-200 text-xs font-semibold"></ul>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 max-w-xl">
+                <h4 class="font-bold text-xs text-slate-700 mb-2">সেভ করা RBO তালিকা:</h4>
+                <ul id="adminRBOList" class="divide-y divide-slate-200 text-xs font-semibold max-h-48 overflow-y-auto custom-scrollbar"></ul>
+            </div>
+        </div>
+
+        <!-- Sub-Tab 3: Item Reference Management -->
+        <div id="adminSubTab-item" class="admin-sub-content hidden space-y-4">
+            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 max-w-xl space-y-3">
+                <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex justify-between items-center">
+                    <span><i class="fa-solid fa-barcode mr-1 text-brand-red"></i> Item Reference Management</span>
+                    <span id="itemCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Items</span>
+                </h3>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">কাস্টমার সিলেক্ট করুন (Auto Loaded):</label>
+                    <select id="itemCustomerSelect" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white font-semibold">
+                        <!-- ডায়নামিক কাস্টমার লিস্ট -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">নতুন Item Reference কোড লিখুন:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="newItemInput" placeholder="যেমন: ON-291351..." class="flex-grow p-2.5 border border-slate-300 rounded-lg text-xs uppercase font-mono font-semibold bg-white">
+                        <button onclick="addAdminItem()" class="px-5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition">Save Item Ref</button>
+                    </div>
                 </div>
             </div>
-
+            <div class="bg-white border border-slate-200 rounded-xl p-4 max-w-xl">
+                <h4 class="font-bold text-xs text-slate-700 mb-2">সেভ করা Item Reference তালিকা:</h4>
+                <ul id="adminItemList" class="divide-y divide-slate-200 text-xs font-mono max-h-48 overflow-y-auto custom-scrollbar"></ul>
+            </div>
         </div>
+
     </div>
 </div>
