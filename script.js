@@ -395,3 +395,20 @@ function closeReplyBox() {
 // GitHub Modal Controls
 function openGithubModal() { document.getElementById('githubModal')?.classList.remove('hidden'); }
 function closeGithubModal() { document.getElementById('githubModal')?.classList.add('hidden'); }
+// Admin Panel Sub-Tab Switching Logic
+function switchAdminSubTab(subTabId) {
+    document.querySelectorAll('.admin-sub-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.admin-sub-btn').forEach(el => {
+        el.classList.remove('bg-slate-900', 'text-white', 'shadow');
+        el.classList.add('bg-slate-200', 'text-slate-700');
+    });
+
+    const targetSub = document.getElementById(`adminSubTab-${subTabId}`);
+    if(targetSub) targetSub.classList.remove('hidden');
+
+    const activeSubBtn = document.getElementById(`adminSubBtn-${subTabId}`);
+    if(activeSubBtn) {
+        activeSubBtn.classList.remove('bg-slate-200', 'text-slate-700');
+        activeSubBtn.classList.add('bg-slate-900', 'text-white', 'shadow');
+    }
+}
