@@ -1,20 +1,34 @@
 <script>
-    // ১. ডেটা স্ট্রাকচার ইনিশিয়ালাইজেশন (Local Storage থেকে লোড করা)
-    let appData = JSON.parse(localStorage.getItem('adminMasterData')) || {
+    // ১. ডেটা লোড করা এবং নিরাপদ রাখা
+    let appData = {
         customers: [],
-        rbos: {},    // format: { "Customer1": ["RBO1", "RBO2"] }
-        items: {}    // format: { "Customer1": ["Item1", "Item2"] }
+        rbos: {},
+        items: {}
     };
+
+    try {
+        const savedData = localStorage.getItem('adminMasterData');
+        if (savedData) {
+            appData = JSON.parse(savedData);
+        }
+    } catch (e) {
+        console.error("Local storage load error: ", e);
+    }
 
     // পেজ লোড হওয়ার পর ডেটা রেন্ডার করা
     document.addEventListener('DOMContentLoaded', () => {
-        // যদি পূর্বে লগইন করা থাকে তবে সেশন ধরে রাখার চেক করতে পারেন
         renderAllData();
     });
 
     // ডেটা Local Storage এ সেভ করার ফাংশন
     function saveData() {
-        localStorage.setItem('adminMasterData', JSON.stringify(appData));
+        try {
+            localStorage.setItem('adminMasterData', JSON.stringify(appData));
+            console.log("Data successfully saved!");
+        } catch (e) {
+            alert("ডেটা সেভ করতে সমস্যা হচ্ছে! আপনার ব্রাউজার স্টোরেজ ফুল বা ব্লক থাকতে পারে।");
+            console.error(e);
+        }
         renderAllData();
     }
 
@@ -24,7 +38,7 @@
         const pass = document.getElementById('adminPass').value;
         const errorMsg = document.getElementById('loginError');
 
-        // ডিফল্ট লগইন ক্রিডেনশিয়াল (username: admin, password: admin123)
+        // ইউজারনেম: admin, পাসওয়ার্ড: admin123
         if (user === 'admin' && pass === 'admin123') {
             document.getElementById('adminLoginBox').classList.add('hidden');
             document.getElementById('adminDashboardBox').classList.remove('hidden');
@@ -44,16 +58,13 @@
 
     // ৩. সাব-ট্যাব সুইচার (Tabs Switching)
     function switchAdminSubTab(tabName) {
-        // সকল কন্টেন্ট লুকানো
         document.querySelectorAll('.admin-sub-content').forEach(el => el.classList.add('hidden'));
         
-        // সকল বাটনের কালার রিসেট করা
         document.querySelectorAll('.admin-sub-btn').forEach(btn => {
             btn.classList.remove('bg-slate-900', 'text-white');
             btn.classList.add('bg-slate-200', 'text-slate-700');
         });
 
-        // সিলেক্টেড ট্যাব ও বাটন অ্যাক্টিভ করা
         document.getElementById(`adminSubTab-${tabName}`).classList.remove('hidden');
         const activeBtn = document.getElementById(`adminSubBtn-${tabName}`);
         activeBtn.classList.remove('bg-slate-200', 'text-slate-700');
@@ -76,8 +87,8 @@
         }
 
         appData.customers.push(customerName);
-        appData.rbos[customerName] = [];
-        appData.items[customerName] = [];
+        if (!appData.rbos[customerName]) appData.rbos[customerName] = [];
+        if (!appData.items[customerName]) appData.items[customerName] = [];
 
         input.value = '';
         saveData();
@@ -168,7 +179,7 @@
         }
     }
 
-    // ৮. ডেটা ইন্টারফেসে প্রদর্শন (UI Rendering)
+    // ৮. ডেটা রেন্ডার করা
     function renderAllData() {
         renderCustomers();
         renderDropdowns();
@@ -179,8 +190,9 @@
     function renderCustomers() {
         const list = document.getElementById('adminCustomerList');
         const countTag = document.getElementById('customerCountTag');
-        list.innerHTML = '';
+        if (!list || !countTag) return;
         
+        list.innerHTML = '';
         countTag.innerText = `${appData.customers.length} Customers`;
 
         appData.customers.forEach((cust, index) => {
@@ -198,6 +210,11 @@
     function renderDropdowns() {
         const rboSelect = document.getElementById('rboCustomerSelect');
         const itemSelect = document.getElementById('itemCustomerSelect');
+        if (!rboSelect || !itemSelect) return;
+
+        // বর্তমান সিলেক্টেড ভ্যালু সেভ করে রাখা যাতে ড্রপডাউন রেন্ডার হলে সিলেকশন হারিয়ে না যায়
+        const prevRboVal = rboSelect.value;
+        const prevItemVal = itemSelect.value;
 
         let options = appData.customers.length === 0 
             ? `<option value="">কোন কাস্টমার পাওয়া যায়নি</option>`
@@ -206,15 +223,20 @@
         rboSelect.innerHTML = options;
         itemSelect.innerHTML = options;
 
-        // ড্রপডাউন পরিবর্তন হলে রেন্ডার আপডেট করা
+        if (appData.customers.includes(prevRboVal)) rboSelect.value = prevRboVal;
+        if (appData.customers.includes(prevItemVal)) itemSelect.value = prevItemVal;
+
         rboSelect.onchange = renderRBOs;
         itemSelect.onchange = renderItems;
     }
 
     function renderRBOs() {
-        const selectedCustomer = document.getElementById('rboCustomerSelect').value;
+        const rboSelect = document.getElementById('rboCustomerSelect');
         const list = document.getElementById('adminRBOList');
         const countTag = document.getElementById('rboCountTag');
+        if (!rboSelect || !list || !countTag) return;
+
+        const selectedCustomer = rboSelect.value;
         list.innerHTML = '';
 
         if (!selectedCustomer || !appData.rbos[selectedCustomer]) {
@@ -228,7 +250,7 @@
         rboList.forEach((rbo, index) => {
             list.innerHTML += `
                 <li class="py-2 flex justify-between items-center">
-                    <span>${rbo} <span class="text-[10px] text-slate-400">(${selectedCustomer})</span></span>
+                    <span>${rbo}</span>
                     <button onclick="deleteRBO('${selectedCustomer}', ${index})" class="text-red-500 hover:text-red-700">
                         <i class="fa-solid fa-trash"></i>
                     </button>
@@ -238,9 +260,12 @@
     }
 
     function renderItems() {
-        const selectedCustomer = document.getElementById('itemCustomerSelect').value;
+        const itemSelect = document.getElementById('itemCustomerSelect');
         const list = document.getElementById('adminItemList');
         const countTag = document.getElementById('itemCountTag');
+        if (!itemSelect || !list || !countTag) return;
+
+        const selectedCustomer = itemSelect.value;
         list.innerHTML = '';
 
         if (!selectedCustomer || !appData.items[selectedCustomer]) {
@@ -254,7 +279,7 @@
         itemList.forEach((item, index) => {
             list.innerHTML += `
                 <li class="py-2 flex justify-between items-center">
-                    <span>${item} <span class="text-[10px] text-slate-400">(${selectedCustomer})</span></span>
+                    <span>${item}</span>
                     <button onclick="deleteItem('${selectedCustomer}', ${index})" class="text-red-500 hover:text-red-700">
                         <i class="fa-solid fa-trash"></i>
                     </button>
