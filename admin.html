@@ -1,122 +1,265 @@
-<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-    <!-- Main Admin Header -->
-    <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
-        <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-user-gear text-2xl"></i></div>
-        <div>
-            <h2 class="text-xl font-bold text-slate-900">Admin Panel & Master Database</h2>
-            <p class="text-xs text-slate-500">কাস্টমার, RBO এবং Item Reference ম্যানেজমেন্ট সিস্টেম</p>
-        </div>
-    </div>
+<script>
+    // ১. ডেটা স্ট্রাকচার ইনিশিয়ালাইজেশন (Local Storage থেকে লোড করা)
+    let appData = JSON.parse(localStorage.getItem('adminMasterData')) || {
+        customers: [],
+        rbos: {},    // format: { "Customer1": ["RBO1", "RBO2"] }
+        items: {}    // format: { "Customer1": ["Item1", "Item2"] }
+    };
 
-    <!-- Admin Login Section -->
-    <div id="adminLoginBox" class="max-w-md mx-auto bg-slate-50 p-6 rounded-xl border border-slate-200 space-y-4">
-        <h3 class="font-bold text-sm text-slate-900 text-center uppercase tracking-wider"><i class="fa-solid fa-lock text-brand-red mr-1"></i> Admin Login Required</h3>
-        <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Username</label>
-            <input type="text" id="adminUser" placeholder="admin" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold">
-        </div>
-        <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
-            <input type="password" id="adminPass" placeholder="••••••••" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold">
-        </div>
-        <button onclick="handleAdminLogin()" class="w-full py-2.5 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg text-xs transition">
-            লগইন করুন
-        </button>
-        <p id="loginError" class="text-red-600 text-xs text-center hidden font-bold">ইউজারনেম অথবা পাসওয়ার্ড ভুল হয়েছে!</p>
-    </div>
+    // পেজ লোড হওয়ার পর ডেটা রেন্ডার করা
+    document.addEventListener('DOMContentLoaded', () => {
+        // যদি পূর্বে লগইন করা থাকে তবে সেশন ধরে রাখার চেক করতে পারেন
+        renderAllData();
+    });
 
-    <!-- Admin Panel Dashboard (লগইন করার পর দেখাবে) -->
-    <div id="adminDashboardBox" class="hidden space-y-6">
-        <!-- Top Control Bar -->
-        <div class="flex justify-between items-center bg-slate-100 p-3 rounded-lg">
-            <span class="text-xs font-bold text-emerald-700"><i class="fa-solid fa-circle-check mr-1"></i> Admin Logged In Successfully</span>
-            <button onclick="handleAdminLogout()" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded">লগআউট</button>
-        </div>
+    // ডেটা Local Storage এ সেভ করার ফাংশন
+    function saveData() {
+        localStorage.setItem('adminMasterData', JSON.stringify(appData));
+        renderAllData();
+    }
 
-        <!-- 3 Sub-Navigators (Tabs) -->
-        <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
-            <button onclick="switchAdminSubTab('customer')" id="adminSubBtn-customer" class="admin-sub-btn px-4 py-2 bg-slate-900 text-white font-bold rounded-lg text-xs transition shadow">
-                1. Customer Management
-            </button>
-            <button onclick="switchAdminSubTab('rbo')" id="adminSubBtn-rbo" class="admin-sub-btn px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition hover:bg-slate-300">
-                2. RBO Management
-            </button>
-            <button onclick="switchAdminSubTab('item')" id="adminSubBtn-item" class="admin-sub-btn px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition hover:bg-slate-300">
-                3. Item Reference Management
-            </button>
-        </div>
+    // ২. এডমিন লগইন এবং লগআউট হ্যান্ডলিং
+    function handleAdminLogin() {
+        const user = document.getElementById('adminUser').value;
+        const pass = document.getElementById('adminPass').value;
+        const errorMsg = document.getElementById('loginError');
 
-        <!-- Sub-Tab 1: Customer Management -->
-        <div id="adminSubTab-customer" class="admin-sub-content space-y-4">
-            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 max-w-xl">
-                <h3 class="font-bold text-sm text-slate-900 mb-3 uppercase tracking-wider flex justify-between items-center">
-                    <span><i class="fa-solid fa-building mr-1 text-brand-red"></i> নতুন কাস্টমার যোগ করুন (Customer Name)</span>
-                    <span id="customerCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Customers</span>
-                </h3>
-                <div class="flex gap-2">
-                    <input type="text" id="newCustomerInput" placeholder="যেমন: JAY MILLS..." class="flex-grow p-2.5 border border-slate-300 rounded-lg text-xs uppercase font-semibold bg-white">
-                    <button onclick="addAdminCustomer()" class="px-5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition">Save Customer</button>
-                </div>
-            </div>
-            <div class="bg-white border border-slate-200 rounded-xl p-4 max-w-xl">
-                <h4 class="font-bold text-xs text-slate-700 mb-2">সেভ করা কাস্টমারদের তালিকা:</h4>
-                <ul id="adminCustomerList" class="divide-y divide-slate-200 text-xs font-semibold max-h-48 overflow-y-auto custom-scrollbar"></ul>
-            </div>
-        </div>
+        // ডিফল্ট লগইন ক্রিডেনশিয়াল (username: admin, password: admin123)
+        if (user === 'admin' && pass === 'admin123') {
+            document.getElementById('adminLoginBox').classList.add('hidden');
+            document.getElementById('adminDashboardBox').classList.remove('hidden');
+            errorMsg.classList.add('hidden');
+            renderAllData();
+        } else {
+            errorMsg.classList.remove('hidden');
+        }
+    }
 
-        <!-- Sub-Tab 2: RBO Management -->
-        <div id="adminSubTab-rbo" class="admin-sub-content hidden space-y-4">
-            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 max-w-xl space-y-3">
-                <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex justify-between items-center">
-                    <span><i class="fa-solid fa-registered mr-1 text-brand-red"></i> RBO Management</span>
-                    <span id="rboCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 RBOs</span>
-                </h3>
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-700 mb-1">কাস্টমার সিলেক্ট করুন (Auto Loaded):</label>
-                    <select id="rboCustomerSelect" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white font-semibold">
-                        <!-- ডায়নামিক কাস্টমার লিস্ট -->
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-700 mb-1">নতুন RBO নাম লিখুন:</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="newRBOInput" placeholder="যেমন: OLD NAVY..." class="flex-grow p-2.5 border border-slate-300 rounded-lg text-xs uppercase font-semibold bg-white">
-                        <button onclick="addAdminRBO()" class="px-5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition">Save RBO</button>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white border border-slate-200 rounded-xl p-4 max-w-xl">
-                <h4 class="font-bold text-xs text-slate-700 mb-2">সেভ করা RBO তালিকা:</h4>
-                <ul id="adminRBOList" class="divide-y divide-slate-200 text-xs font-semibold max-h-48 overflow-y-auto custom-scrollbar"></ul>
-            </div>
-        </div>
+    function handleAdminLogout() {
+        document.getElementById('adminLoginBox').classList.remove('hidden');
+        document.getElementById('adminDashboardBox').classList.add('hidden');
+        document.getElementById('adminUser').value = '';
+        document.getElementById('adminPass').value = '';
+    }
 
-        <!-- Sub-Tab 3: Item Reference Management -->
-        <div id="adminSubTab-item" class="admin-sub-content hidden space-y-4">
-            <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 max-w-xl space-y-3">
-                <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider flex justify-between items-center">
-                    <span><i class="fa-solid fa-barcode mr-1 text-brand-red"></i> Item Reference Management</span>
-                    <span id="itemCountTag" class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700">0 Items</span>
-                </h3>
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-700 mb-1">কাস্টমার সিলেক্ট করুন (Auto Loaded):</label>
-                    <select id="itemCustomerSelect" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white font-semibold">
-                        <!-- ডায়নামিক কাস্টমার লিস্ট -->
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-700 mb-1">নতুন Item Reference কোড লিখুন:</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="newItemInput" placeholder="যেমন: ON-291351..." class="flex-grow p-2.5 border border-slate-300 rounded-lg text-xs uppercase font-mono font-semibold bg-white">
-                        <button onclick="addAdminItem()" class="px-5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition">Save Item Ref</button>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white border border-slate-200 rounded-xl p-4 max-w-xl">
-                <h4 class="font-bold text-xs text-slate-700 mb-2">সেভ করা Item Reference তালিকা:</h4>
-                <ul id="adminItemList" class="divide-y divide-slate-200 text-xs font-mono max-h-48 overflow-y-auto custom-scrollbar"></ul>
-            </div>
-        </div>
+    // ৩. সাব-ট্যাব সুইচার (Tabs Switching)
+    function switchAdminSubTab(tabName) {
+        // সকল কন্টেন্ট লুকানো
+        document.querySelectorAll('.admin-sub-content').forEach(el => el.classList.add('hidden'));
+        
+        // সকল বাটনের কালার রিসেট করা
+        document.querySelectorAll('.admin-sub-btn').forEach(btn => {
+            btn.classList.remove('bg-slate-900', 'text-white');
+            btn.classList.add('bg-slate-200', 'text-slate-700');
+        });
 
-    </div>
-</div>
+        // সিলেক্টেড ট্যাব ও বাটন অ্যাক্টিভ করা
+        document.getElementById(`adminSubTab-${tabName}`).classList.remove('hidden');
+        const activeBtn = document.getElementById(`adminSubBtn-${tabName}`);
+        activeBtn.classList.remove('bg-slate-200', 'text-slate-700');
+        activeBtn.classList.add('bg-slate-900', 'text-white');
+    }
+
+    // ৪. Customer যোগ করা
+    function addAdminCustomer() {
+        const input = document.getElementById('newCustomerInput');
+        const customerName = input.value.trim().toUpperCase();
+
+        if (!customerName) {
+            alert('দয়া করে কাস্টমারের নাম লিখুন!');
+            return;
+        }
+
+        if (appData.customers.includes(customerName)) {
+            alert('এই কাস্টমারটি ইতিমধ্যেই যুক্ত করা আছে!');
+            return;
+        }
+
+        appData.customers.push(customerName);
+        appData.rbos[customerName] = [];
+        appData.items[customerName] = [];
+
+        input.value = '';
+        saveData();
+    }
+
+    // ৫. RBO যোগ করা
+    function addAdminRBO() {
+        const customerSelect = document.getElementById('rboCustomerSelect');
+        const input = document.getElementById('newRBOInput');
+        const selectedCustomer = customerSelect.value;
+        const rboName = input.value.trim().toUpperCase();
+
+        if (!selectedCustomer) {
+            alert('প্রথমে একটি কাস্টমার সিলেক্ট করুন!');
+            return;
+        }
+        if (!rboName) {
+            alert('দয়া করে RBO নাম লিখুন!');
+            return;
+        }
+
+        if (!appData.rbos[selectedCustomer]) {
+            appData.rbos[selectedCustomer] = [];
+        }
+
+        if (appData.rbos[selectedCustomer].includes(rboName)) {
+            alert('এই কাস্টমারের অধীনে এই RBO আগেই যুক্ত করা আছে!');
+            return;
+        }
+
+        appData.rbos[selectedCustomer].push(rboName);
+        input.value = '';
+        saveData();
+    }
+
+    // ৬. Item Reference যোগ করা
+    function addAdminItem() {
+        const customerSelect = document.getElementById('itemCustomerSelect');
+        const input = document.getElementById('newItemInput');
+        const selectedCustomer = customerSelect.value;
+        const itemCode = input.value.trim().toUpperCase();
+
+        if (!selectedCustomer) {
+            alert('প্রথমে একটি কাস্টমার সিলেক্ট করুন!');
+            return;
+        }
+        if (!itemCode) {
+            alert('দয়া করে Item Reference কোড লিখুন!');
+            return;
+        }
+
+        if (!appData.items[selectedCustomer]) {
+            appData.items[selectedCustomer] = [];
+        }
+
+        if (appData.items[selectedCustomer].includes(itemCode)) {
+            alert('এই Item Reference কোডটি আগেই সেভ করা আছে!');
+            return;
+        }
+
+        appData.items[selectedCustomer].push(itemCode);
+        input.value = '';
+        saveData();
+    }
+
+    // ৭. ডিলিট ফাংশনালিটি
+    function deleteCustomer(index) {
+        const customerName = appData.customers[index];
+        if (confirm(`আপনি কি "${customerName}" কে ডিলিট করতে চান?`)) {
+            appData.customers.splice(index, 1);
+            delete appData.rbos[customerName];
+            delete appData.items[customerName];
+            saveData();
+        }
+    }
+
+    function deleteRBO(customer, index) {
+        if (confirm(`RBO টি মুছে ফেলতে চান?`)) {
+            appData.rbos[customer].splice(index, 1);
+            saveData();
+        }
+    }
+
+    function deleteItem(customer, index) {
+        if (confirm(`Item Reference টি মুছে ফেলতে চান?`)) {
+            appData.items[customer].splice(index, 1);
+            saveData();
+        }
+    }
+
+    // ৮. ডেটা ইন্টারফেসে প্রদর্শন (UI Rendering)
+    function renderAllData() {
+        renderCustomers();
+        renderDropdowns();
+        renderRBOs();
+        renderItems();
+    }
+
+    function renderCustomers() {
+        const list = document.getElementById('adminCustomerList');
+        const countTag = document.getElementById('customerCountTag');
+        list.innerHTML = '';
+        
+        countTag.innerText = `${appData.customers.length} Customers`;
+
+        appData.customers.forEach((cust, index) => {
+            list.innerHTML += `
+                <li class="py-2 flex justify-between items-center">
+                    <span>${cust}</span>
+                    <button onclick="deleteCustomer(${index})" class="text-red-500 hover:text-red-700">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </li>
+            `;
+        });
+    }
+
+    function renderDropdowns() {
+        const rboSelect = document.getElementById('rboCustomerSelect');
+        const itemSelect = document.getElementById('itemCustomerSelect');
+
+        let options = appData.customers.length === 0 
+            ? `<option value="">কোন কাস্টমার পাওয়া যায়নি</option>`
+            : appData.customers.map(c => `<option value="${c}">${c}</option>`).join('');
+
+        rboSelect.innerHTML = options;
+        itemSelect.innerHTML = options;
+
+        // ড্রপডাউন পরিবর্তন হলে রেন্ডার আপডেট করা
+        rboSelect.onchange = renderRBOs;
+        itemSelect.onchange = renderItems;
+    }
+
+    function renderRBOs() {
+        const selectedCustomer = document.getElementById('rboCustomerSelect').value;
+        const list = document.getElementById('adminRBOList');
+        const countTag = document.getElementById('rboCountTag');
+        list.innerHTML = '';
+
+        if (!selectedCustomer || !appData.rbos[selectedCustomer]) {
+            countTag.innerText = `0 RBOs`;
+            return;
+        }
+
+        const rboList = appData.rbos[selectedCustomer];
+        countTag.innerText = `${rboList.length} RBOs`;
+
+        rboList.forEach((rbo, index) => {
+            list.innerHTML += `
+                <li class="py-2 flex justify-between items-center">
+                    <span>${rbo} <span class="text-[10px] text-slate-400">(${selectedCustomer})</span></span>
+                    <button onclick="deleteRBO('${selectedCustomer}', ${index})" class="text-red-500 hover:text-red-700">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </li>
+            `;
+        });
+    }
+
+    function renderItems() {
+        const selectedCustomer = document.getElementById('itemCustomerSelect').value;
+        const list = document.getElementById('adminItemList');
+        const countTag = document.getElementById('itemCountTag');
+        list.innerHTML = '';
+
+        if (!selectedCustomer || !appData.items[selectedCustomer]) {
+            countTag.innerText = `0 Items`;
+            return;
+        }
+
+        const itemList = appData.items[selectedCustomer];
+        countTag.innerText = `${itemList.length} Items`;
+
+        itemList.forEach((item, index) => {
+            list.innerHTML += `
+                <li class="py-2 flex justify-between items-center">
+                    <span>${item} <span class="text-[10px] text-slate-400">(${selectedCustomer})</span></span>
+                    <button onclick="deleteItem('${selectedCustomer}', ${index})" class="text-red-500 hover:text-red-700">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </li>
+            `;
+        });
+    }
+</script>
