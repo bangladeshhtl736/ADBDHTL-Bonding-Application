@@ -1,96 +1,232 @@
-<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-    <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
-        <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-headset text-2xl"></i></div>
-        <div>
-            <h2 class="text-xl font-bold text-slate-900">Online Support & Ticket Desk</h2>
-            <p class="text-xs text-slate-500">কাস্টমারদের সাপোর্ট আবেদন, হোয়াটসঅ্যাপ নম্বর এবং অটো ফিল্টার সিস্টেম</p>
-        </div>
-    </div>
+<script>
+    // ১. গ্লোবাল স্টেট এবং LocalStorage থেকে ডাটা লোড
+    let supportTickets = [];
+    let activeTicketId = null;
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- বাম পাশ: কাস্টমার সাপোর্ট আবেদন ফর্ম -->
-        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-            <h3 class="font-bold text-sm text-slate-900 mb-3 uppercase tracking-wider"><i class="fa-solid fa-ticket mr-1 text-brand-red"></i> নতুন সাপোর্ট আবেদন ফর্ম (Customer Ticket Form)</h3>
-            <form onsubmit="submitSupportTicket(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">কাস্টমার নাম (অটো ডাটা ফিল্টার)</label>
-                    <!-- কাস্টমার লিস্ট থেকে সিলেক্ট করার ড্রপডাউন (অটো ফিল্টার) -->
-                    <select id="suppCustomerSelect" required onchange="onCustomerSelectChange()" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white">
-                        <!-- এডমিন প্যানেলের ডাটাবেজ থেকে এখানে নামগুলো অটো আসবে -->
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">যোগাযোগকারীর নাম (Contact Person)</label>
-                    <input type="text" required id="suppName" placeholder="আপনার নাম লিখুন..." class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">হোয়াটসঅ্যাপ নম্বর (WhatsApp Number)</label>
-                    <input type="text" required id="suppWhatsapp" placeholder="যেমন: +8801711000000" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white font-mono">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">ফ্যাক্টরি / Vendor Name</label>
-                    <input type="text" required id="suppFactory" value="JAY MILLS (BANGLADESH) PRIVATE LIMITED" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিষয়</label>
-                    <select id="suppSubject" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white">
-                      <option>Peel off</option>
-                        <option>Shiny Mark</option>
-                        <option>Release Mark</option>
-                        <option>Glue Mark</option>
-                        <option>Carrier Mark</option>
-                        <option>Cracking Issue</option>
-                        <option>Illegible Text</option>
-                        <option>Bubble Issue</option>
-                        <option>Tied Peel</option>
-                        <option>Wash Fail</option>
-                        <option>New Machine</option>
-                        <option>Size Mixing Issue</option>
-                        <option>Label Shortage</option>
-                        <option>Quality Issue/Print Defect</option>
-                        <option></option>
-                        <option></option>
-                        <option></option>
-                        <option></option>
-                        <option></option>
-                        <option></option>
-                        <option>Online Support</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">সমস্যার বিস্তারিত বিবরণ</label>
-                    <textarea rows="3" required id="suppDetails" class="w-full p-2.5 border border-slate-300 rounded-lg text-xs bg-white" placeholder="আপনার সমস্যাটি বিস্তারিত এখানে লিখুন..."></textarea>
-                </div>
-                <button type="submit" class="w-full py-3 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg text-xs transition shadow">
-                    <i class="fa-solid fa-paper-plane mr-1"></i> সাপোর্ট টিকিট জমা দিন
-                </button>
-            </form>
-        </div>
+    // LocalStorage থেকে টিকিট লোড করা
+    function loadTicketsFromStorage() {
+        try {
+            const savedTickets = localStorage.getItem('appSupportTickets');
+            if (savedTickets) {
+                supportTickets = JSON.parse(savedTickets);
+            }
+        } catch (e) {
+            console.error("Ticket storage load error: ", e);
+        }
+    }
 
-        <!-- ডান পাশ: জমা হওয়া টিকিটের তালিকা এবং উত্তর দেওয়ার অপশন -->
-        <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl flex flex-col justify-between h-[520px]">
-            <div class="font-bold text-xs text-slate-700 pb-2 border-b border-slate-200 flex justify-between items-center">
-                <span><i class="fa-solid fa-list-ul text-brand-red mr-1"></i> কাস্টমার টিকিট ও হোয়াটসঅ্যাপ ডেক্স</span>
-                <span id="ticketCountBadge" class="bg-brand-red text-white px-2 py-0.5 rounded text-[10px]">0 Tickets</span>
-            </div>
+    // LocalStorage এ টিকিট সেভ করা
+    function saveTicketsToStorage() {
+        try {
+            localStorage.setItem('appSupportTickets', JSON.stringify(supportTickets));
+        } catch (e) {
+            console.error("Ticket storage save error: ", e);
+        }
+    }
 
-            <!-- টিকিট লিস্ট কন্টেইনার -->
-            <div id="ticketListBox" class="flex-grow my-2 space-y-2 overflow-y-auto custom-scrollbar text-xs">
-                <!-- ডায়নামিক টিকিট এখানে দেখাবে -->
-                <div class="text-slate-400 text-center py-10">কোনো নতুন টিকিট জমা হয়নি।</div>
-            </div>
+    // ২. অটো টিকিট নম্বর জেনারেট করা (যেমন: TICK-1001, TICK-1002)
+    function generateTicketNumber() {
+        const lastTicket = supportTickets[0]; // সর্বশেষ টিকিটটি দেখা
+        if (!lastTicket || !lastTicket.ticketNo) {
+            return 'TICK-1001';
+        }
+        const lastNum = parseInt(lastTicket.ticketNo.replace('TICK-', ''), 10);
+        return 'TICK-' + (isNaN(lastNum) ? 1001 : lastNum + 1);
+    }
 
-            <!-- উত্তর লেখার বক্স -->
-            <div id="replySection" class="hidden border-t border-slate-200 pt-2 space-y-2">
-                <div class="text-[11px] font-bold text-slate-700 flex justify-between">
-                    <span>রিপ্লাই দেওয়া হচ্ছে: <span id="activeTicketTitle" class="text-brand-red"></span></span>
-                    <button onclick="closeReplyBox()" class="text-red-600 hover:underline">বন্ধ করুন</button>
+    // ৩. অ্যাডমিন প্যানেল থেকে কাস্টমার লিস্ট ড্রপডাউনে পপুলেট করা
+    function populateCustomerDropdown() {
+        const customerSelect = document.getElementById('suppCustomerSelect');
+        if (!customerSelect) return;
+
+        let customers = [];
+        try {
+            const adminData = localStorage.getItem('adminMasterData');
+            if (adminData) {
+                const parsed = JSON.parse(adminData);
+                customers = parsed.customers || [];
+            }
+        } catch (e) {
+            console.error("Admin data parse error: ", e);
+        }
+
+        if (customers.length === 0) {
+            customerSelect.innerHTML = `<option value="">কোনো কাস্টমার পাওয়া যায়নি</option>`;
+        } else {
+            customerSelect.innerHTML = `<option value="">-- কাস্টমার সিলেক্ট করুন --</option>` + 
+                customers.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+    }
+
+    // কাস্টমার পরিবর্তন হলে এক্সট্রা কোনো ফিল্টার লজিক রাখতে চাইলে
+    window.onCustomerSelectChange = function() {
+        // প্রয়োজন হলে ফিল্টারিং লজিক এখানে যুক্ত করা যাবে
+    };
+
+    // ৪. নতুন টিকিট জমা দেওয়া (Submit Form)
+    window.submitSupportTicket = function(event) {
+        event.preventDefault();
+
+        const customer = document.getElementById('suppCustomerSelect').value;
+        const name = document.getElementById('suppName').value.trim();
+        const whatsapp = document.getElementById('suppWhatsapp').value.trim();
+        const factory = document.getElementById('suppFactory').value.trim();
+        const subject = document.getElementById('suppSubject').value;
+        const details = document.getElementById('suppDetails').value.trim();
+
+        if (!customer) {
+            alert('দয়া করে কাস্টমার নাম সিলেক্ট করুন!');
+            return;
+        }
+
+        const newTicket = {
+            id: Date.now(),
+            ticketNo: generateTicketNumber(),
+            customer: customer,
+            name: name,
+            whatsapp: whatsapp,
+            factory: factory,
+            subject: subject,
+            details: details,
+            status: 'Open',
+            replies: [],
+            createdAt: new Date().toLocaleString('bn-BD', { dateStyle: 'short', timeStyle: 'short' })
+        };
+
+        // নতুন টিকিট তালিকার প্রথমে যোগ হবে
+        supportTickets.unshift(newTicket);
+        saveTicketsToStorage();
+        renderTickets();
+
+        // ফর্ম ক্লিয়ার করা
+        document.getElementById('suppName').value = '';
+        document.getElementById('suppWhatsapp').value = '';
+        document.getElementById('suppDetails').value = '';
+        document.getElementById('suppCustomerSelect').value = '';
+
+        alert(`আপনার সাপোর্ট টিকিট জমা হয়েছে! টিকিট নং: ${newTicket.ticketNo}`);
+    };
+
+    // ৫. জমা হওয়া টিকিটগুলো ডেক্সে রেন্ডার করা
+    function renderTickets() {
+        const ticketBox = document.getElementById('ticketListBox');
+        const countBadge = document.getElementById('ticketCountBadge');
+        if (!ticketBox || !countBadge) return;
+
+        countBadge.innerText = `${supportTickets.length} Tickets`;
+
+        if (supportTickets.length === 0) {
+            ticketBox.innerHTML = `<div class="text-slate-400 text-center py-10">কোনো নতুন টিকিট জমা হয়নি।</div>`;
+            return;
+        }
+
+        ticketBox.innerHTML = supportTickets.map(ticket => {
+            // হোয়াটসঅ্যাপ নম্বর ফরম্যাট করা (যেমন: +88017... থেকে শুধুমাত্র সংখ্যা)
+            const cleanPhone = ticket.whatsapp.replace(/[^0-9]/g, '');
+            const waLink = cleanPhone ? `https://wa.me/${cleanPhone}` : '#';
+
+            return `
+                <div class="p-3 bg-white border border-slate-200 rounded-lg shadow-sm space-y-2">
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-brand-red font-mono">${ticket.ticketNo}</span>
+                            <span class="bg-slate-100 text-slate-700 font-semibold px-2 py-0.5 rounded text-[10px]">${ticket.customer}</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400">${ticket.createdAt}</span>
+                    </div>
+
+                    <div class="text-slate-700 space-y-1">
+                        <div class="font-bold text-slate-900">${ticket.subject}</div>
+                        <p class="text-slate-600 text-[11px] bg-slate-50 p-2 rounded border border-slate-100">${ticket.details}</p>
+                        <div class="flex justify-between items-center text-[10px] text-slate-500 pt-1">
+                            <span><i class="fa-solid fa-user text-slate-400 mr-1"></i>${ticket.name} (${ticket.factory})</span>
+                            <a href="${waLink}" target="_blank" class="text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> ${ticket.whatsapp}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- পূর্বে দেওয়া রিপ্লাইগুলো দেখানো -->
+                    ${ticket.replies && ticket.replies.length > 0 ? `
+                        <div class="bg-amber-50 border-l-2 border-amber-400 p-2 text-[11px] text-slate-700 rounded-r mt-2">
+                            <span class="font-bold text-amber-900">সমাধান/উত্তর:</span>
+                            ${ticket.replies.map(r => `<div class="mt-0.5">• ${r}</div>`).join('')}
+                        </div>
+                    ` : ''}
+
+                    <div class="flex justify-between items-center pt-1 border-t border-slate-100">
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded ${ticket.status === 'Open' ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}">
+                            ${ticket.status}
+                        </span>
+                        <div class="flex gap-2">
+                            <button onclick="openReplyBox(${ticket.id}, '${ticket.ticketNo}')" class="text-[11px] text-slate-900 hover:underline font-bold">
+                                <i class="fa-solid fa-reply mr-1"></i>রিপ্লাই দিন
+                            </button>
+                            <button onclick="deleteTicket(${ticket.id})" class="text-[11px] text-red-500 hover:underline">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex gap-2">
-                    <input type="text" id="replyInput" placeholder="আপনার উত্তর বা সমাধান এখানে লিখুন..." class="flex-grow p-2 border border-slate-300 rounded text-xs bg-white">
-                    <button onclick="sendTicketReply()" class="px-4 bg-slate-900 text-white text-xs font-bold rounded hover:bg-slate-800">রিপ্লাই দিন</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+            `;
+        }).join('');
+    }
+
+    // ৬. রিপ্লাই সেকশন ওপেন ও ক্লোজ করা
+    window.openReplyBox = function(id, ticketNo) {
+        activeTicketId = id;
+        const replySection = document.getElementById('replySection');
+        const activeTitle = document.getElementById('activeTicketTitle');
+        if (replySection && activeTitle) {
+            activeTitle.innerText = ticketNo;
+            replySection.classList.remove('hidden');
+        }
+    };
+
+    window.closeReplyBox = function() {
+        activeTicketId = null;
+        const replySection = document.getElementById('replySection');
+        const replyInput = document.getElementById('replyInput');
+        if (replySection) replySection.classList.add('hidden');
+        if (replyInput) replyInput.value = '';
+    };
+
+    // ৭. রিপ্লাই সেভ করা
+    window.sendTicketReply = function() {
+        const replyInput = document.getElementById('replyInput');
+        if (!replyInput || !activeTicketId) return;
+
+        const replyText = replyInput.value.trim();
+        if (!replyText) {
+            alert('দয়া করে উত্তরের বিবরণ লিখুন!');
+            return;
+        }
+
+        const ticket = supportTickets.find(t => t.id === activeTicketId);
+        if (ticket) {
+            if (!ticket.replies) ticket.replies = [];
+            ticket.replies.push(replyText);
+            ticket.status = 'Solved'; // উত্তর দিলে স্ট্যাটাস Solved হবে
+            saveTicketsToStorage();
+            renderTickets();
+            closeReplyBox();
+        }
+    };
+
+    // ৮. টিকিট ডিলিট ফাংশনালিটি
+    window.deleteTicket = function(id) {
+        if (confirm('আপনি কি এই টিকিটটি মুছে ফেলতে চান?')) {
+            supportTickets = supportTickets.filter(t => t.id !== id);
+            saveTicketsToStorage();
+            renderTickets();
+            if (activeTicketId === id) closeReplyBox();
+        }
+    };
+
+    // ৯. ডম লোড হলে ডেটা পপুলেট ও রেন্ডার করা
+    document.addEventListener('DOMContentLoaded', () => {
+        loadTicketsFromStorage();
+        populateCustomerDropdown();
+        renderTickets();
+    });
+</script>
