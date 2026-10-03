@@ -6,19 +6,16 @@
         items: {}
     };
 
-    try {
-        const savedData = localStorage.getItem('adminMasterData');
-        if (savedData) {
-            appData = JSON.parse(savedData);
+    function loadDataFromStorage() {
+        try {
+            const savedData = localStorage.getItem('adminMasterData');
+            if (savedData) {
+                appData = JSON.parse(savedData);
+            }
+        } catch (e) {
+            console.error("Local storage load error: ", e);
         }
-    } catch (e) {
-        console.error("Local storage load error: ", e);
     }
-
-    // পেজ লোড হওয়ার পর ডেটা রেন্ডার করা
-    document.addEventListener('DOMContentLoaded', () => {
-        renderAllData();
-    });
 
     // ডেটা Local Storage এ সেভ করার ফাংশন
     function saveData() {
@@ -32,32 +29,40 @@
         renderAllData();
     }
 
-    // ২. এডমিন লগইন এবং লগআউট হ্যান্ডলিং
-    function handleAdminLogin() {
-        const user = document.getElementById('adminUser').value;
-        const pass = document.getElementById('adminPass').value;
+    // ২. এডমিন লগইন এবং লগআউট হ্যান্ডলিং (Global Safe)
+    window.handleAdminLogin = function() {
+        const userInput = document.getElementById('adminUser');
+        const passInput = document.getElementById('adminPass');
         const errorMsg = document.getElementById('loginError');
 
-        // ইউজারনেম: admin, পাসওয়ার্ড: admin123
+        if (!userInput || !passInput) return;
+
+        const user = userInput.value;
+        const pass = passInput.value;
+
+        // ইউজারনেম: admin, পাসওয়ার্ড: admin123
         if (user === 'admin' && pass === 'admin123') {
-            document.getElementById('adminLoginBox').classList.add('hidden');
-            document.getElementById('adminDashboardBox').classList.remove('hidden');
-            errorMsg.classList.add('hidden');
+            document.getElementById('adminLoginBox')?.classList.add('hidden');
+            document.getElementById('adminDashboardBox')?.classList.remove('hidden');
+            errorMsg?.classList.add('hidden');
             renderAllData();
         } else {
-            errorMsg.classList.remove('hidden');
+            errorMsg?.classList.remove('hidden');
         }
-    }
+    };
 
-    function handleAdminLogout() {
-        document.getElementById('adminLoginBox').classList.remove('hidden');
-        document.getElementById('adminDashboardBox').classList.add('hidden');
-        document.getElementById('adminUser').value = '';
-        document.getElementById('adminPass').value = '';
-    }
+    window.handleAdminLogout = function() {
+        document.getElementById('adminLoginBox')?.classList.remove('hidden');
+        document.getElementById('adminDashboardBox')?.classList.add('hidden');
+        
+        const userInput = document.getElementById('adminUser');
+        const passInput = document.getElementById('adminPass');
+        if (userInput) userInput.value = '';
+        if (passInput) passInput.value = '';
+    };
 
-    // ৩. সাব-ট্যাব সুইচার (Tabs Switching)
-    function switchAdminSubTab(tabName) {
+    // ৩. সাব-ট্যাব সুইচার
+    window.switchAdminSubTab = function(tabName) {
         document.querySelectorAll('.admin-sub-content').forEach(el => el.classList.add('hidden'));
         
         document.querySelectorAll('.admin-sub-btn').forEach(btn => {
@@ -65,19 +70,25 @@
             btn.classList.add('bg-slate-200', 'text-slate-700');
         });
 
-        document.getElementById(`adminSubTab-${tabName}`).classList.remove('hidden');
+        const targetTab = document.getElementById(`adminSubTab-${tabName}`);
         const activeBtn = document.getElementById(`adminSubBtn-${tabName}`);
-        activeBtn.classList.remove('bg-slate-200', 'text-slate-700');
-        activeBtn.classList.add('bg-slate-900', 'text-white');
-    }
+
+        if (targetTab) targetTab.classList.remove('hidden');
+        if (activeBtn) {
+            activeBtn.classList.remove('bg-slate-200', 'text-slate-700');
+            activeBtn.classList.add('bg-slate-900', 'text-white');
+        }
+    };
 
     // ৪. Customer যোগ করা
-    function addAdminCustomer() {
+    window.addAdminCustomer = function() {
         const input = document.getElementById('newCustomerInput');
+        if (!input) return;
+
         const customerName = input.value.trim().toUpperCase();
 
         if (!customerName) {
-            alert('দয়া করে কাস্টমারের নাম লিখুন!');
+            alert('দয়া করে কাস্টমারের নাম লিখুন!');
             return;
         }
 
@@ -92,12 +103,14 @@
 
         input.value = '';
         saveData();
-    }
+    };
 
     // ৫. RBO যোগ করা
-    function addAdminRBO() {
+    window.addAdminRBO = function() {
         const customerSelect = document.getElementById('rboCustomerSelect');
         const input = document.getElementById('newRBOInput');
+        if (!customerSelect || !input) return;
+
         const selectedCustomer = customerSelect.value;
         const rboName = input.value.trim().toUpperCase();
 
@@ -106,7 +119,7 @@
             return;
         }
         if (!rboName) {
-            alert('দয়া করে RBO নাম লিখুন!');
+            alert('দয়া করে RBO নাম লিখুন!');
             return;
         }
 
@@ -122,12 +135,14 @@
         appData.rbos[selectedCustomer].push(rboName);
         input.value = '';
         saveData();
-    }
+    };
 
     // ৬. Item Reference যোগ করা
-    function addAdminItem() {
+    window.addAdminItem = function() {
         const customerSelect = document.getElementById('itemCustomerSelect');
         const input = document.getElementById('newItemInput');
+        if (!customerSelect || !input) return;
+
         const selectedCustomer = customerSelect.value;
         const itemCode = input.value.trim().toUpperCase();
 
@@ -136,7 +151,7 @@
             return;
         }
         if (!itemCode) {
-            alert('দয়া করে Item Reference কোড লিখুন!');
+            alert('দয়া করে Item Reference কোড লিখুন!');
             return;
         }
 
@@ -152,10 +167,10 @@
         appData.items[selectedCustomer].push(itemCode);
         input.value = '';
         saveData();
-    }
+    };
 
     // ৭. ডিলিট ফাংশনালিটি
-    function deleteCustomer(index) {
+    window.deleteCustomer = function(index) {
         const customerName = appData.customers[index];
         if (confirm(`আপনি কি "${customerName}" কে ডিলিট করতে চান?`)) {
             appData.customers.splice(index, 1);
@@ -163,21 +178,21 @@
             delete appData.items[customerName];
             saveData();
         }
-    }
+    };
 
-    function deleteRBO(customer, index) {
+    window.deleteRBO = function(customer, index) {
         if (confirm(`RBO টি মুছে ফেলতে চান?`)) {
             appData.rbos[customer].splice(index, 1);
             saveData();
         }
-    }
+    };
 
-    function deleteItem(customer, index) {
+    window.deleteItem = function(customer, index) {
         if (confirm(`Item Reference টি মুছে ফেলতে চান?`)) {
             appData.items[customer].splice(index, 1);
             saveData();
         }
-    }
+    };
 
     // ৮. ডেটা রেন্ডার করা
     function renderAllData() {
@@ -212,12 +227,11 @@
         const itemSelect = document.getElementById('itemCustomerSelect');
         if (!rboSelect || !itemSelect) return;
 
-        // বর্তমান সিলেক্টেড ভ্যালু সেভ করে রাখা যাতে ড্রপডাউন রেন্ডার হলে সিলেকশন হারিয়ে না যায়
         const prevRboVal = rboSelect.value;
         const prevItemVal = itemSelect.value;
 
         let options = appData.customers.length === 0 
-            ? `<option value="">কোন কাস্টমার পাওয়া যায়নি</option>`
+            ? `<option value="">কোন কাস্টমার পাওয়া যায়নি</option>`
             : appData.customers.map(c => `<option value="${c}">${c}</option>`).join('');
 
         rboSelect.innerHTML = options;
@@ -287,4 +301,10 @@
             `;
         });
     }
+
+    // পেজ পুরোপুরি লোড হওয়ার পর কল হবে
+    document.addEventListener('DOMContentLoaded', () => {
+        loadDataFromStorage();
+        renderAllData();
+    });
 </script>
