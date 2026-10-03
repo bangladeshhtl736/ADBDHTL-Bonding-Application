@@ -1,43 +1,154 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
 body {
-    font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
-    background-color: #f8fafc;
+  background-color: #f4f6f9;
+  padding: 20px;
 }
 
-@media print {
-    .no-print {
-        display: none !important;
-    }
-    body {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    .print-container {
-        box-shadow: none !important;
-        border: 1px solid #000 !important;
-        padding: 15px !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-    input, select, textarea {
-        border: none !important;
-        background: transparent !important;
-        appearance: none;
-        -webkit-appearance: none;
-        font-weight: bold;
-        padding: 0 !important;
-    }
+.hub-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+/* Header Section */
+.hub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #eef2f5;
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f5f9;
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+
+.brand-icon {
+  background-color: #d32f2f;
+  color: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.brand h2 {
+  font-size: 20px;
+  color: #1a1a1a;
+  margin-bottom: 3px;
+}
+
+.brand p {
+  font-size: 13px;
+  color: #666;
+}
+
+/* Filter Styling */
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f9fa;
+  padding: 8px 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.filter-wrapper label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-wrapper label i {
+  color: #d32f2f;
+  margin-right: 4px;
+}
+
+.filter-wrapper select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  background-color: white;
+}
+
+/* Grid System */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 18px;
+}
+
+/* Card Styling */
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  background: #ffffff;
+  border: 1px solid #e5e9f0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+}
+
+.card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Colors matching image */
+.red-bg { background-color: #fde8e8; color: #e53935; }
+.yellow-bg { background-color: #fef5e7; color: #d97706; }
+.blue-bg { background-color: #e0f2fe; color: #0284c7; }
+.purple-bg { background-color: #f3e8ff; color: #9333ea; }
+.green-bg { background-color: #dcfce7; color: #16a34a; }
+.indigo-bg { background-color: #e0e7ff; color: #4f46e5; }
+.pink-bg { background-color: #fce7f3; color: #db2777; }
+.cyan-bg { background-color: #cffaff; color: #0891b2; }
+.teal-bg { background-color: #ccfbf1; color: #0d9488; }
+.red-light-bg { background-color: #fee2e2; color: #dc2626; }
+.blue-light-bg { background-color: #e0f2fe; color: #2563eb; }
+
+.card-content h4 {
+  font-size: 15px;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.card-content p {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.5;
 }
