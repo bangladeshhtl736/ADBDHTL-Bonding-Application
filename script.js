@@ -285,6 +285,18 @@ function filterProblemsList() {
     } else if (selectedFilter === 'group2') {
         group1Cards.forEach(card => card.classList.add('hidden'));
         group2Cards.forEach(card => card.classList.remove('hidden'));
+    } else if (selectedFilter === 'group3') {
+        group1Cards.forEach(card => card.classList.add('hidden'));
+        group2Cards.forEach(card => card.classList.remove('hidden'));
+    } else if (selectedFilter === 'group4') {
+        group1Cards.forEach(card => card.classList.add('hidden'));
+        group2Cards.forEach(card => card.classList.remove('hidden'));
+    } else if (selectedFilter === 'group5') {
+        group1Cards.forEach(card => card.classList.add('hidden'));
+        group2Cards.forEach(card => card.classList.remove('hidden'));
+    } else if (selectedFilter === 'group6') {
+        group1Cards.forEach(card => card.classList.add('hidden'));
+        group2Cards.forEach(card => card.classList.remove('hidden'));
     }
 }
 
