@@ -424,3 +424,34 @@ function switchAdminSubTab(subTabId) {
         activeSubBtn.classList.add('bg-slate-900', 'text-white', 'shadow');
     }
 }
+
+
+function filterProblemsList() {
+  // ১. ড্রপডাউন থেকে সিলেক্ট করা ভ্যালু নেওয়া
+  const selectedValue = document.getElementById("problemFilter").value;
+  
+  // ২. সব সমস্যা কার্ড সিলেক্ট করা
+  const allCards = document.querySelectorAll(".problem-card");
+
+  // ৩. প্রতিটি কার্ড ফিল্টার করা
+  allCards.forEach(card => {
+    if (selectedValue === "all") {
+      card.style.display = "block"; // 'সকল সমস্যা' সিলেক্ট করলে সব কার্ড দেখাবে
+    } else {
+      // যদি কার্ডের ক্লাসের সাথে ড্রপডাউনের ভ্যালু (যেমন group-1) মিলে যায়
+      if (card.classList.contains(selectedValue)) {
+        card.style.display = "block"; // কার্ড দেখাবে
+      } else {
+        card.style.display = "none";  // বাকি কার্ডগুলো লুকিয়ে ফেলবে
+      }
+    }
+  });
+}
+
+// পেজ লোড হওয়ার পর ইভেন্ট সেটআপ
+document.addEventListener("DOMContentLoaded", () => {
+  const filterSelect = document.getElementById("problemFilter");
+  if (filterSelect) {
+    filterSelect.addEventListener("change", filterProblemsList);
+  }
+});
