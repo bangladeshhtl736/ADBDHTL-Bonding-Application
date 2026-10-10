@@ -20,12 +20,22 @@
     </script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen p-4 md:p-8 font-sans">
 
     <div class="max-w-6xl mx-auto space-y-8">
         
-        <!-- Header -->
+        <!-- Header Section -->
         <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3">
@@ -98,7 +108,7 @@
             </div>
         </div>
 
-        <!-- Reference Image Section (Positioned Directly Below) -->
+        <!-- Reference Images Section (Bottom Gallery) -->
         <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200 space-y-6">
             <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
                 <div class="p-2.5 bg-slate-100 text-slate-700 rounded-lg">
@@ -106,18 +116,37 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-slate-900">মেশিন সেটিং ও মাপজোখের রেফারেন্স ছবি (Reference Gallery)</h3>
-                    <p class="text-xs text-slate-500">মেশিনের সঠিক রিডিং ও পরিমাপ নেওয়ার পদ্ধতি নিচে ছবি আকারে দেওয়া হলো</p>
+                    <p class="text-xs text-slate-500">মেশিনের সঠিক রিডিং ও পরিমাপ নেওয়ার ডায়াগাফিক্স পদ্ধতি নিচে দেওয়া হলো</p>
                 </div>
             </div>
 
             <!-- Image Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <!-- Card 1 -->
-                <div onclick="openModal('Piston Size.jpg', 'Piston Diameter Measurement (পিস্টন ডায়ামিটার পরিমাপ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
-                    <div class="h-48 overflow-hidden bg-slate-200 relative">
-                        <img src="Piston Size.jpg" alt="Piston Size" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Piston+Size.jpg'">
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                <!-- Card 1: Piston Size -->
+                <div onclick="openSvgModal('pistonSvg', 'Piston Diameter Measurement (পিস্টন ডায়ামিটার পরিমাপ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-800 relative flex items-center justify-center p-4">
+                        <!-- Piston Diagram SVG -->
+                        <svg id="pistonSvg" class="w-full h-full max-h-40" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="200" fill="#0f172a"/>
+                            <rect x="70" y="30" width="160" height="140" rx="12" fill="#334155" stroke="#94a3b8" stroke-width="3"/>
+                            <circle cx="150" cy="100" r="50" fill="#475569" stroke="#cbd5e1" stroke-width="4"/>
+                            <circle cx="150" cy="100" r="25" fill="#1e293b"/>
+                            <!-- Ruler Tape -->
+                            <rect x="100" y="93" width="100" height="14" fill="#fef08a" rx="2" stroke="#ca8a04" stroke-width="1.5"/>
+                            <line x1="110" y1="93" x2="110" y2="101" stroke="#000" stroke-width="1.5"/>
+                            <line x1="120" y1="93" x2="120" y2="99" stroke="#000"/>
+                            <line x1="130" y1="93" x2="130" y2="101" stroke="#000" stroke-width="1.5"/>
+                            <line x1="140" y1="93" x2="140" y2="99" stroke="#000"/>
+                            <line x1="150" y1="93" x2="150" y2="103" stroke="#dc2626" stroke-width="2"/>
+                            <line x1="160" y1="93" x2="160" y2="99" stroke="#000"/>
+                            <line x1="170" y1="93" x2="170" y2="101" stroke="#000" stroke-width="1.5"/>
+                            <line x1="180" y1="93" x2="180" y2="99" stroke="#000"/>
+                            <line x1="190" y1="93" x2="190" y2="101" stroke="#000" stroke-width="1.5"/>
+                            <text x="145" y="125" fill="#f8fafc" font-size="11" font-weight="bold" font-family="sans-serif">⌀ 10.0 CM</text>
+                            <text x="80" y="22" fill="#38bdf8" font-size="12" font-weight="bold" font-family="sans-serif">Piston Cylinder Top View</text>
+                        </svg>
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2 backdrop-blur-[2px]">
                             <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
                         </div>
                     </div>
@@ -127,11 +156,25 @@
                     </div>
                 </div>
 
-                <!-- Card 2 -->
-                <div onclick="openModal('Silicon Length Width.jpg', 'Silicon Rubber Dimensions (সিলিকন রবারের দৈর্ঘ্য ও প্রস্থ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
-                    <div class="h-48 overflow-hidden bg-slate-200 relative">
-                        <img src="Silicon Length Width.jpg" alt="Silicon Length Width" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Silicon+Length+Width.jpg'">
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                <!-- Card 2: Silicon Length Width -->
+                <div onclick="openSvgModal('siliconSvg', 'Silicon Rubber Dimensions (সিলিকন রবারের দৈর্ঘ্য ও প্রস্থ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-800 relative flex items-center justify-center p-4">
+                        <!-- Silicon Pad Diagram SVG -->
+                        <svg id="siliconSvg" class="w-full h-full max-h-40" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="200" fill="#0f172a"/>
+                            <!-- Silicon Rubber Block -->
+                            <rect x="50" y="45" width="200" height="110" rx="8" fill="#dc2626" stroke="#f87171" stroke-width="2"/>
+                            <!-- Measurement Overlay -->
+                            <rect x="58" y="53" width="184" height="94" rx="4" fill="none" stroke="#fef08a" stroke-width="2" stroke-dasharray="6 4"/>
+                            <!-- Dimension Lines -->
+                            <text x="110" y="105" fill="#ffffff" font-size="15" font-weight="bold" font-family="sans-serif">Silicon Length (L)</text>
+                            <text x="115" y="125" fill="#fef08a" font-size="13" font-weight="bold" font-family="sans-serif">Width (W)</text>
+                            <path d="M 50 168 L 250 168" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+                            <text x="125" y="185" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">18.0 CM</text>
+                            <path d="M 265 45 L 265 155" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="272" y="105" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">7.5 CM</text>
+                        </svg>
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2 backdrop-blur-[2px]">
                             <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
                         </div>
                     </div>
@@ -141,11 +184,23 @@
                     </div>
                 </div>
 
-                <!-- Card 3 -->
-                <div onclick="openModal('Line Pressure.jpg', 'Air Line Pressure Gauge (এয়ার লাইন প্রেসার গেইজ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
-                    <div class="h-48 overflow-hidden bg-slate-200 relative">
-                        <img src="Line Pressure.jpg" alt="Line Pressure" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Line+Pressure.jpg'">
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                <!-- Card 3: Line Pressure -->
+                <div onclick="openSvgModal('gaugeSvg', 'Air Line Pressure Gauge (এয়ার লাইন প্রেসার গেইজ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-800 relative flex items-center justify-center p-4">
+                        <!-- Pressure Gauge SVG -->
+                        <svg id="gaugeSvg" class="w-full h-full max-h-40" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="200" fill="#0f172a"/>
+                            <rect x="110" y="15" width="80" height="170" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="3"/>
+                            <circle cx="150" cy="80" r="45" fill="#f8fafc" stroke="#0284c7" stroke-width="4"/>
+                            <!-- Gauge Markings -->
+                            <circle cx="150" cy="80" r="35" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="3 3"/>
+                            <!-- Needle pointing to ~3.5 bar -->
+                            <line x1="150" y1="80" x2="165" y2="50" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="150" cy="80" r="5" fill="#0f172a"/>
+                            <text x="135" y="110" fill="#0369a1" font-size="10" font-weight="bold" font-family="sans-serif">AIRTAC</text>
+                            <text x="130" y="122" fill="#0f172a" font-size="11" font-weight="bold" font-family="sans-serif">3.5 Kg/cm²</text>
+                        </svg>
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2 backdrop-blur-[2px]">
                             <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
                         </div>
                     </div>
@@ -155,11 +210,20 @@
                     </div>
                 </div>
 
-                <!-- Card 4 -->
-                <div onclick="openModal('Temperature Display.jpg', 'Machine Temperature Controller (তাপমাত্রা কন্ট্রোলার ডিসপ্লে)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
-                    <div class="h-48 overflow-hidden bg-slate-200 relative">
-                        <img src="Temperature Display.jpg" alt="Temperature Display" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Temperature+Display.jpg'">
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                <!-- Card 4: Temperature Controller -->
+                <div onclick="openSvgModal('tempControllerSvg', 'Machine Temperature Controller (তাপমাত্রা কন্ট্রোলার ডিসপ্লে)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-800 relative flex items-center justify-center p-4">
+                        <!-- Temperature Display SVG -->
+                        <svg id="tempControllerSvg" class="w-full h-full max-h-40" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="200" fill="#0f172a"/>
+                            <rect x="50" y="25" width="200" height="150" rx="10" fill="#222" stroke="#ea580c" stroke-width="4"/>
+                            <!-- Digital Screen -->
+                            <rect x="75" y="45" width="150" height="80" rx="6" fill="#050505"/>
+                            <text x="90" y="80" fill="#ef4444" font-size="28" font-weight="bold" font-family="monospace">PV 160°C</text>
+                            <text x="90" y="112" fill="#22c55e" font-size="24" font-weight="bold" font-family="monospace">SV 160°C</text>
+                            <text x="75" y="152" fill="#9ca3af" font-size="10" font-family="sans-serif">REX-C100 THERMOSTAT</text>
+                        </svg>
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2 backdrop-blur-[2px]">
                             <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
                         </div>
                     </div>
@@ -169,11 +233,21 @@
                     </div>
                 </div>
 
-                <!-- Card 5 -->
-                <div onclick="openModal('Dwell Time.jpg', 'Dwell Time Setting (ডুয়েল টাইম টাইমার)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
-                    <div class="h-48 overflow-hidden bg-slate-200 relative">
-                        <img src="Dwell Time.jpg" alt="Dwell Time" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Dwell+Time.jpg'">
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                <!-- Card 5: Dwell Time -->
+                <div onclick="openSvgModal('dwellSvg', 'Dwell Time Setting (ডুয়েল টাইম টাইমার)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-800 relative flex items-center justify-center p-4">
+                        <!-- Timer SVG -->
+                        <svg id="dwellSvg" class="w-full h-full max-h-40" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="200" fill="#0f172a"/>
+                            <rect x="60" y="30" width="180" height="140" rx="8" fill="#d1d5db" stroke="#475569" stroke-width="4"/>
+                            <rect x="80" y="45" width="140" height="40" rx="4" fill="#0f172a"/>
+                            <text x="95" y="73" fill="#a855f7" font-size="22" font-weight="bold" font-family="monospace">0 2 . 5 S</text>
+                            <!-- Selector Buttons -->
+                            <rect x="80" y="95" width="140" height="50" rx="4" fill="#94a3b8"/>
+                            <text x="92" y="125" fill="#0f172a" font-size="14" font-weight="bold" font-family="monospace">[+]  1 2 S 0 0  [-]</text>
+                            <text x="100" y="160" fill="#1e293b" font-size="10" font-weight="bold" font-family="sans-serif">OMRON DH48S TIMER</text>
+                        </svg>
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2 backdrop-blur-[2px]">
                             <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
                         </div>
                     </div>
@@ -183,11 +257,43 @@
                     </div>
                 </div>
 
-                <!-- Card 6 -->
-                <div onclick="openModal('Temperature Check.jpg', 'Temperature Strip Calibration (টেম্পারেচার স্ট্রিপ দিয়ে ভেরিফিকেশন)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
-                    <div class="h-48 overflow-hidden bg-slate-200 relative">
-                        <img src="Temperature Check.jpg" alt="Temperature Check" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Temperature+Check.jpg'">
-                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                <!-- Card 6: Temperature Check Strip -->
+                <div onclick="openSvgModal('stripSvg', 'Temperature Strip Calibration (টেম্পারেচার স্ট্রিপ দিয়ে ভেরিফিকেশন)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-800 relative flex items-center justify-center p-4">
+                        <!-- Thermo Strip SVG -->
+                        <svg id="stripSvg" class="w-full h-full max-h-40" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="300" height="200" fill="#0f172a"/>
+                            <!-- Thermo Strip background -->
+                            <rect x="30" y="80" width="240" height="40" fill="#ffffff" rx="4" stroke="#cbd5e1" stroke-width="2"/>
+                            <!-- Temp segments -->
+                            <rect x="40" y="85" width="24" height="30" fill="#1e293b"/>
+                            <text x="43" y="105" fill="#fff" font-size="9" font-family="sans-serif">120</text>
+                            
+                            <rect x="68" y="85" width="24" height="30" fill="#1e293b"/>
+                            <text x="71" y="105" fill="#fff" font-size="9" font-family="sans-serif">127</text>
+
+                            <rect x="96" y="85" width="24" height="30" fill="#1e293b"/>
+                            <text x="99" y="105" fill="#fff" font-size="9" font-family="sans-serif">138</text>
+
+                            <rect x="124" y="85" width="24" height="30" fill="#1e293b"/>
+                            <text x="127" y="105" fill="#fff" font-size="9" font-family="sans-serif">149</text>
+
+                            <rect x="152" y="85" width="24" height="30" fill="#1e293b"/>
+                            <text x="155" y="105" fill="#fff" font-size="9" font-family="sans-serif">154</text>
+
+                            <!-- Reached temperature active indication -->
+                            <rect x="180" y="85" width="24" height="30" fill="#dc2626"/>
+                            <text x="183" y="105" fill="#fff" font-size="9" font-weight="bold" font-family="sans-serif">160</text>
+
+                            <rect x="208" y="85" width="24" height="30" fill="#cbd5e1"/>
+                            <text x="211" y="105" fill="#0f172a" font-size="9" font-family="sans-serif">166</text>
+
+                            <rect x="236" y="85" width="24" height="30" fill="#cbd5e1"/>
+                            <text x="239" y="105" fill="#0f172a" font-size="9" font-family="sans-serif">171</text>
+                            
+                            <text x="80" y="55" fill="#f8fafc" font-size="13" font-weight="bold" font-family="sans-serif">Thermo Strip Reading: 160°C</text>
+                        </svg>
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2 backdrop-blur-[2px]">
                             <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
                         </div>
                     </div>
@@ -202,20 +308,20 @@
 
     </div>
 
-    <!-- Image Lightbox Modal -->
+    <!-- Image Lightbox / Modal View -->
     <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal()">
-        <div class="bg-slate-900 text-white rounded-2xl max-w-3xl w-full p-4 relative border border-slate-700 shadow-2xl" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
-                <h3 id="modalTitle" class="font-bold text-sm sm:text-base text-slate-200">Reference Image</h3>
+        <div class="bg-slate-900 text-white rounded-2xl max-w-3xl w-full p-6 relative border border-slate-700 shadow-2xl space-y-4" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-800">
+                <h3 id="modalTitle" class="font-bold text-base sm:text-lg text-slate-200">Reference Diagram</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
-            <div class="max-h-[70vh] flex items-center justify-center bg-black/50 rounded-xl overflow-hidden border border-slate-800">
-                <img id="modalImage" src="" alt="Modal View" class="max-h-[68vh] w-auto object-contain">
+            <div id="modalContent" class="h-80 flex items-center justify-center bg-black/60 rounded-xl overflow-hidden border border-slate-800 p-4">
+                <!-- SVG injected dynamically -->
             </div>
-            <div class="text-center pt-3">
-                <button onclick="closeModal()" class="px-5 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-300">
+            <div class="text-center pt-2">
+                <button onclick="closeModal()" class="px-6 py-2 bg-brand-red hover:bg-brand-darkred text-white text-xs font-semibold rounded-lg transition">
                     বন্ধ করুন (Close)
                 </button>
             </div>
@@ -252,19 +358,29 @@
         function syncToReport() {
             const result = document.getElementById('calcAppliedResult').innerText;
             const msg = document.createElement('div');
-            msg.className = "fixed bottom-5 right-5 bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-lg font-medium text-sm flex items-center gap-2 z-50";
+            msg.className = "fixed bottom-5 right-5 bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-lg font-medium text-sm flex items-center gap-2 z-50 transition transform duration-300";
             msg.innerHTML = '<i class="fa-solid fa-circle-check"></i> রিডিং সফলতা সহকারে সিঙ্ক করা হয়েছে (' + result + ' Kg/cm²)';
             document.body.appendChild(msg);
             setTimeout(() => msg.remove(), 3000);
         }
 
-        // Modal Controls
-        function openModal(imgSrc, title) {
+        // Modal Controls with SVG copy
+        function openSvgModal(svgId, title) {
             const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
+            const modalContent = document.getElementById('modalContent');
             const modalTitle = document.getElementById('modalTitle');
 
-            modalImg.src = imgSrc;
+            const sourceSvg = document.getElementById(svgId);
+            if (sourceSvg) {
+                modalContent.innerHTML = sourceSvg.outerHTML;
+                const modalSvg = modalContent.querySelector('svg');
+                if (modalSvg) {
+                    modalSvg.removeAttribute('id');
+                    modalSvg.classList.remove('max-h-40');
+                    modalSvg.classList.add('w-full', 'h-full', 'max-h-72');
+                }
+            }
+
             modalTitle.innerText = title;
             modal.classList.remove('hidden');
         }
