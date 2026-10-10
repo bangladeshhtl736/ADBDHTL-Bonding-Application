@@ -9,12 +9,38 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="space-y-4">
-            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Line Pressure (Kg)</label><input type="number" step="0.1" id="calcLinePress" value="3.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
-            <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Piston Diameter (CM)</label><input type="number" step="0.1" id="calcPistonDia" value="10" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
-            <div class="grid grid-cols-2 gap-4">
-                <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Length (CM)</label><input type="number" step="0.1" id="calcRubberL" value="18" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
-                <div><label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Width (CM)</label><input type="number" step="0.1" id="calcRubberW" value="7.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold"></div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Line Pressure (Kg)</label>
+                <input type="number" step="0.1" id="calcLinePress" value="3.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
             </div>
+            
+            <!-- Piston Diameter with Reference Image -->
+            <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Piston Diameter (CM)</label>
+                <div class="flex gap-3 items-center">
+                    <input type="number" step="0.1" id="calcPistonDia" value="10" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
+                    <img src="Piston Size.jpg" alt="Piston Size Reference" class="w-14 h-12 object-cover rounded-lg border border-slate-300 cursor-pointer hover:scale-105 transition" title="Piston Diameter Measurement Reference">
+                </div>
+            </div>
+
+            <!-- Rubber Length & Width with Reference Image -->
+            <div class="space-y-2">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Length (CM)</label>
+                        <input type="number" step="0.1" id="calcRubberL" value="18" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Width (CM)</label>
+                        <input type="number" step="0.1" id="calcRubberW" value="7.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
+                    </div>
+                </div>
+                <!-- Silicon Measurement Visual Reference -->
+                <div class="mt-2 rounded-lg overflow-hidden border border-slate-200">
+                    <img src="Silicon Length Width.jpg" alt="Silicon Length & Width Reference" class="w-full h-24 object-cover">
+                </div>
+            </div>
+
             <button onclick="syncToReport()" class="w-full py-3 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i> এই রিডিং রিপোর্ট পেজে নিয়ে যান
             </button>
