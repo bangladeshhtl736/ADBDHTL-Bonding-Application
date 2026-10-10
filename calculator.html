@@ -1,61 +1,282 @@
-<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-    <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
-        <div class="p-3 bg-brand-red text-white rounded-lg"><i class="fa-solid fa-calculator text-2xl"></i></div>
-        <div>
-            <h2 class="text-xl font-bold text-slate-900">Applied Pressure Calculator</h2>
-            <p class="text-xs text-slate-500">Calculate exact force per unit area on Heat Transfer Labels</p>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Transfer Label Applied Pressure & Settings Calculator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-red': '#dc2626',
+                        'brand-darkred': '#b91c1c'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen p-4 md:p-8 font-sans">
+
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3">
+                    <i class="fa-solid fa-temperature-arrow-up text-brand-red"></i>
+                    Heat Transfer Label Pressure Calculator
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">
+                    Calculate precise applied pressure and calibrate machine parameters for optimal heat sealing quality.
+                </p>
+            </div>
+            <div class="bg-slate-800 px-4 py-2 rounded-xl border border-slate-700 text-xs font-mono text-slate-300">
+                <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> Quality Control Tool
+            </div>
+        </div>
+
+        <!-- Main Calculator Card -->
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+                <div class="p-3 bg-brand-red text-white rounded-lg">
+                    <i class="fa-solid fa-calculator text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Applied Pressure Calculator</h2>
+                    <p class="text-xs text-slate-500">Calculate exact force per unit area on Heat Transfer Labels</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Inputs Section -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Line Pressure (Kg)</label>
+                        <input type="number" step="0.1" id="calcLinePress" value="3.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:outline-none font-semibold text-slate-900">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Piston Diameter (CM)</label>
+                        <input type="number" step="0.1" id="calcPistonDia" value="10" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:outline-none font-semibold text-slate-900">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Length (CM)</label>
+                            <input type="number" step="0.1" id="calcRubberL" value="18" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:outline-none font-semibold text-slate-900">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Width (CM)</label>
+                            <input type="number" step="0.1" id="calcRubberW" value="7.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:outline-none font-semibold text-slate-900">
+                        </div>
+                    </div>
+                    <button onclick="syncToReport()" class="w-full py-3 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg transition flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> এই রিডিং রিপোর্ট পেজে নিয়ে যান
+                    </button>
+                </div>
+
+                <!-- Outputs Section -->
+                <div class="bg-slate-900 text-white p-6 rounded-xl space-y-4 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs uppercase font-bold text-slate-400">Calculated Applied Pressure Result</span>
+                        <div class="text-4xl sm:text-5xl font-extrabold text-emerald-400 my-2">
+                            <span id="calcAppliedResult">2.04</span> <span class="text-lg text-white font-normal">Kg/cm²</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed border-t border-slate-800 pt-3 mt-3">
+                            <strong class="text-amber-400">নোট:</strong> লাইন প্রেসার এবং এপ্লাইড প্রেসার একই নয়। সিলিন্ডার পিস্টন এরিয়া ও সিলিকন প্যাড এরিয়ার অনুপাত অনুযায়ী প্রকৃত চাপ পরিবর্তিত হয়।
+                        </p>
+                    </div>
+                    <div class="bg-slate-800/80 p-4 rounded-lg font-mono text-xs space-y-2 border border-slate-700">
+                        <div class="flex justify-between"><span class="text-slate-400">Piston Area (A₁):</span><span id="calcPistonAreaText" class="text-slate-200">78.54 cm²</span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Rubber Area (A₂):</span><span id="calcRubberAreaText" class="text-slate-200">135.00 cm²</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reference Image Section (Positioned Directly Below) -->
+        <div class="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200 space-y-6">
+            <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
+                <div class="p-2.5 bg-slate-100 text-slate-700 rounded-lg">
+                    <i class="fa-solid fa-images text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">মেশিন সেটিং ও মাপজোখের রেফারেন্স ছবি (Reference Gallery)</h3>
+                    <p class="text-xs text-slate-500">মেশিনের সঠিক রিডিং ও পরিমাপ নেওয়ার পদ্ধতি নিচে ছবি আকারে দেওয়া হলো</p>
+                </div>
+            </div>
+
+            <!-- Image Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Card 1 -->
+                <div onclick="openModal('Piston Size.jpg', 'Piston Diameter Measurement (পিস্টন ডায়ামিটার পরিমাপ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-200 relative">
+                        <img src="Piston Size.jpg" alt="Piston Size" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Piston+Size.jpg'">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm">Piston Diameter Measurement</h4>
+                        <p class="text-xs text-slate-500 mt-1">পিস্টনের ব্যাস (Diameter) মেপে সেটিং ক্যালকুলেটরে ইনপুট দিন।</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div onclick="openModal('Silicon Length Width.jpg', 'Silicon Rubber Dimensions (সিলিকন রবারের দৈর্ঘ্য ও প্রস্থ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-200 relative">
+                        <img src="Silicon Length Width.jpg" alt="Silicon Length Width" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Silicon+Length+Width.jpg'">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm">Silicon Rubber Dimensions</h4>
+                        <p class="text-xs text-slate-500 mt-1">হিট সিল রবার প্যাডের দৈর্ঘ্য (Length) ও প্রস্থ (Width) পরিমাপ।</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div onclick="openModal('Line Pressure.jpg', 'Air Line Pressure Gauge (এয়ার লাইন প্রেসার গেইজ)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-200 relative">
+                        <img src="Line Pressure.jpg" alt="Line Pressure" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Line+Pressure.jpg'">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm">Air Line Pressure Gauge</h4>
+                        <p class="text-xs text-slate-500 mt-1">মেশিনের এয়ার রেগুলেটর গেইজ থেকে লাইন প্রেসার (Bar/Kg) নিশ্চিত করুন।</p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div onclick="openModal('Temperature Display.jpg', 'Machine Temperature Controller (তাপমাত্রা কন্ট্রোলার ডিসপ্লে)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-200 relative">
+                        <img src="Temperature Display.jpg" alt="Temperature Display" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Temperature+Display.jpg'">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm">Machine Temperature Controller</h4>
+                        <p class="text-xs text-slate-500 mt-1">ডিজিটাল থার্মোস্ট্যাটে সেটিং টেম্পারেচার (SV) ও বর্তমান হিট (PV)।</p>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div onclick="openModal('Dwell Time.jpg', 'Dwell Time Setting (ডুয়েল টাইম টাইমার)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-200 relative">
+                        <img src="Dwell Time.jpg" alt="Dwell Time" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Dwell+Time.jpg'">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm">Dwell Time Setting</h4>
+                        <p class="text-xs text-slate-500 mt-1">টাইমার ডিভাইসের মাধ্যমে প্রেস হিট থাকার সময় (Dwell Time in seconds) সেটিং।</p>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div onclick="openModal('Temperature Check.jpg', 'Temperature Strip Calibration (টেম্পারেচার স্ট্রিপ দিয়ে ভেরিফিকেশন)')" class="group bg-slate-50 border border-slate-200 rounded-xl overflow-hidden hover:shadow-md transition cursor-pointer flex flex-col">
+                    <div class="h-48 overflow-hidden bg-slate-200 relative">
+                        <img src="Temperature Check.jpg" alt="Temperature Check" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Temperature+Check.jpg'">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-medium text-xs gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus text-base"></i> বড় করে দেখুন
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm">Temperature Strip Calibration</h4>
+                        <p class="text-xs text-slate-500 mt-1">থার্মো-স্ট্রিপ পেপার ব্যবহারের মাধ্যমে সরাসরি সিলের প্রকৃত তাপমাত্রা পরীক্ষা।</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal()">
+        <div class="bg-slate-900 text-white rounded-2xl max-w-3xl w-full p-4 relative border border-slate-700 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+                <h3 id="modalTitle" class="font-bold text-sm sm:text-base text-slate-200">Reference Image</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="max-h-[70vh] flex items-center justify-center bg-black/50 rounded-xl overflow-hidden border border-slate-800">
+                <img id="modalImage" src="" alt="Modal View" class="max-h-[68vh] w-auto object-contain">
+            </div>
+            <div class="text-center pt-3">
+                <button onclick="closeModal()" class="px-5 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-300">
+                    বন্ধ করুন (Close)
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Line Pressure (Kg)</label>
-                <input type="number" step="0.1" id="calcLinePress" value="3.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
-            </div>
-            
-            <!-- Piston Diameter with Reference Image -->
-            <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Piston Diameter (CM)</label>
-                <div class="flex gap-3 items-center">
-                    <input type="number" step="0.1" id="calcPistonDia" value="10" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
-                    <img src="Piston Size.jpg" alt="Piston Size Reference" class="w-14 h-12 object-cover rounded-lg border border-slate-300 cursor-pointer hover:scale-105 transition" title="Piston Diameter Measurement Reference">
-                </div>
-            </div>
+    <script>
+        // Calculation Logic for Standalone Calculator
+        function runStandaloneCalc() {
+            const linePress = parseFloat(document.getElementById('calcLinePress').value) || 0;
+            const pistonDia = parseFloat(document.getElementById('calcPistonDia').value) || 0;
+            const rubberL = parseFloat(document.getElementById('calcRubberL').value) || 0;
+            const rubberW = parseFloat(document.getElementById('calcRubberW').value) || 0;
 
-            <!-- Rubber Length & Width with Reference Image -->
-            <div class="space-y-2">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Length (CM)</label>
-                        <input type="number" step="0.1" id="calcRubberL" value="18" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Rubber Width (CM)</label>
-                        <input type="number" step="0.1" id="calcRubberW" value="7.5" oninput="runStandaloneCalc()" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-red font-semibold">
-                    </div>
-                </div>
-                <!-- Silicon Measurement Visual Reference -->
-                <div class="mt-2 rounded-lg overflow-hidden border border-slate-200">
-                    <img src="Silicon Length Width.jpg" alt="Silicon Length & Width Reference" class="w-full h-24 object-cover">
-                </div>
-            </div>
+            // Area calculations
+            const radius = pistonDia / 2;
+            const pistonArea = Math.PI * Math.pow(radius, 2); // cm²
+            const rubberArea = rubberL * rubberW; // cm²
 
-            <button onclick="syncToReport()" class="w-full py-3 bg-brand-red hover:bg-brand-darkred text-white font-bold rounded-lg transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i> এই রিডিং রিপোর্ট পেজে নিয়ে যান
-            </button>
-        </div>
+            let appliedPressure = 0;
+            if (rubberArea > 0) {
+                // Force = Line Pressure * Piston Area
+                // Applied Pressure = Force / Rubber Area
+                appliedPressure = (linePress * pistonArea) / rubberArea;
+            }
 
-        <div class="bg-slate-900 text-white p-6 rounded-xl space-y-4 flex flex-col justify-between">
-            <div>
-                <span class="text-xs uppercase font-bold text-slate-400">Calculated Applied Pressure Result</span>
-                <div class="text-4xl sm:text-5xl font-extrabold text-emerald-400 my-2"><span id="calcAppliedResult">2.04</span> <span class="text-lg text-white font-normal">Kg/cm²</span></div>
-                <p class="text-xs text-slate-300 leading-relaxed border-t border-slate-800 pt-3 mt-3"><strong class="text-amber-400">নোট:</strong> লাইন প্রেসার এবং এপ্লাইড প্রেসার একই নয়।</p>
-            </div>
-            <div class="bg-slate-800/80 p-4 rounded-lg font-mono text-xs space-y-2 border border-slate-700">
-                <div class="flex justify-between"><span class="text-slate-400">Piston Area (A₁):</span><span id="calcPistonAreaText" class="text-slate-200">78.54 cm²</span></div>
-                <div class="flex justify-between"><span class="text-slate-400">Rubber Area (A₂):</span><span id="calcRubberAreaText" class="text-slate-200">135.00 cm²</span></div>
-            </div>
-        </div>
-    </div>
-</div>
+            // Update UI
+            document.getElementById('calcAppliedResult').innerText = appliedPressure.toFixed(2);
+            document.getElementById('calcPistonAreaText').innerText = pistonArea.toFixed(2) + ' cm²';
+            document.getElementById('calcRubberAreaText').innerText = rubberArea.toFixed(2) + ' cm²';
+        }
+
+        // Sync Action
+        function syncToReport() {
+            const result = document.getElementById('calcAppliedResult').innerText;
+            const msg = document.createElement('div');
+            msg.className = "fixed bottom-5 right-5 bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-lg font-medium text-sm flex items-center gap-2 z-50";
+            msg.innerHTML = '<i class="fa-solid fa-circle-check"></i> রিডিং সফলতা সহকারে সিঙ্ক করা হয়েছে (' + result + ' Kg/cm²)';
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 3000);
+        }
+
+        // Modal Controls
+        function openModal(imgSrc, title) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+
+            modalImg.src = imgSrc;
+            modalTitle.innerText = title;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+
+        // Initial Calculation Run
+        window.onload = function() {
+            runStandaloneCalc();
+        };
+    </script>
+</body>
+</html>
